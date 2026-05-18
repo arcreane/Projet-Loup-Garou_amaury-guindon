@@ -27,6 +27,12 @@ public class GameService {
         return r.path("session_id").asInt();
     }
 
+    /** Crée une partie d'entraînement (le joueur + N-1 bots, démarre tout de suite). */
+    public int createPracticeGame(int totalPlayers) throws Exception {
+        JsonNode r = api.post("/games/practice", ApiClient.body("total_players", totalPlayers));
+        return r.path("session_id").asInt();
+    }
+
     public void joinGame(int id) throws Exception {
         api.post("/games/" + id + "/join", null);
     }

@@ -23,6 +23,7 @@ CREATE TABLE players (
     token              VARCHAR(64)  DEFAULT NULL,
     last_seen          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     current_session_id INT DEFAULT NULL,
+    is_bot             TINYINT(1) NOT NULL DEFAULT 0,
     created_at         TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY uq_pseudo_disc (pseudo, discriminator),
     INDEX idx_token (token),
@@ -146,6 +147,21 @@ CREATE TABLE friendships (
 -- =====================================================
 -- INVITATIONS EN PARTIE
 -- =====================================================
+-- =====================================================
+-- BOTS IA (mode entraînement)
+-- =====================================================
+INSERT INTO players (pseudo, discriminator, email, password_hash, avatar_url, is_bot, elo) VALUES
+('Aurore',   '9001', 'bot1@werewolf.ai',  '!BOT_NO_LOGIN!', '🌸', 1, 1000),
+('Brutus',   '9002', 'bot2@werewolf.ai',  '!BOT_NO_LOGIN!', '🐺', 1, 1000),
+('Celeste',  '9003', 'bot3@werewolf.ai',  '!BOT_NO_LOGIN!', '✨', 1, 1000),
+('Dimitri',  '9004', 'bot4@werewolf.ai',  '!BOT_NO_LOGIN!', '🗡', 1, 1000),
+('Elara',    '9005', 'bot5@werewolf.ai',  '!BOT_NO_LOGIN!', '🦉', 1, 1000),
+('Faust',    '9006', 'bot6@werewolf.ai',  '!BOT_NO_LOGIN!', '🧙', 1, 1000),
+('Gaia',     '9007', 'bot7@werewolf.ai',  '!BOT_NO_LOGIN!', '🌿', 1, 1000),
+('Helios',   '9008', 'bot8@werewolf.ai',  '!BOT_NO_LOGIN!', '☀',  1, 1000),
+('Iris',     '9009', 'bot9@werewolf.ai',  '!BOT_NO_LOGIN!', '🌈', 1, 1000),
+('Jorus',    '9010', 'bota@werewolf.ai',  '!BOT_NO_LOGIN!', '🦊', 1, 1000);
+
 CREATE TABLE game_invitations (
     id          INT AUTO_INCREMENT PRIMARY KEY,
     from_id     INT NOT NULL,

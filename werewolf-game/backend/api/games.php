@@ -86,9 +86,19 @@ function handle_players(int $sid): void {
 }
 
 function handle_state(int $sid): void {
+    require_once __DIR__ . '/bots.php';
+
     $me = require_auth();
 
-    advance_if_needed($sid);
+    // Faire jouer les bots puis avancer si phase résolue.
+    // On boucle pour gérer les changements de phase en chaîne.
+    for ($i = 0; $i < 6; $i++) {
+        $before = phase_snapshot($sid);
+        run_bots($sid);
+        advance_if_needed($sid);
+        $after = phase_snapshot($sid);
+        if ($before === $after) break;
+    }
 
     $g = db()->prepare('SELECT * FROM game_sessions WHERE id = ?');
     $g->execute([$sid]);
@@ -420,6 +430,82 @@ function handle_update_avatar(): void {
     if (mb_strlen($avatar) > 64) $avatar = mb_substr($avatar, 0, 64);
     db()->prepare('UPDATE players SET avatar_url=? WHERE id=?')->execute([$avatar, $me['id']]);
     json_response(['ok' => true, 'avatar_url' => $avatar]);
+}
+
+// =====================================================
+// MODE ENTRAÎNEMENT (vs bots IA)
+// =====================================================
+function handle_create_practice(): void {
+    require_once __DIR__ . '/bots.php';
+    require_once __DIR__ . '/game_logic.php';
+
+    $me = require_auth();
+    $in = read_json();
+    $total = (int)($in['total_players'] ?? 5);
+    if ($total < 4) $total = 4;
+    if ($total > 10) $total = 10;
+    $nbBots = $total - 1;
+
+    // Sélectionne N bots au hasard
+    $bs = db()->prepare('SELECT id FROM players WHERE is_bot = 1 ORDER BY RAND() LIMIT ' . (int)$nbBots);
+    $bs->execute();
+    $botIds = array_map('intval', array_column($bs->fetchAll(), 'id'));
+    if (count($botIds) < $nbBots) {
+        json_error('Pas assez de bots configurés dans la BDD', 500);
+    }
+
+    $pdo = db();
+    $pdo->beginTransaction();
+    try {
+        $pdo->prepare('INSERT INTO game_sessions(name, is_ranked, status, phase_duration) VALUES (?, 0, "WAITING", 60)')
+            ->execute(['Entraînement de ' . $me['pseudo']]);
+        $sid = (int)$pdo->lastInsertId();
+
+        // Hôte (le joueur humain)
+        $pdo->prepare('INSERT INTO session_players(session_id, player_id, is_host) VALUES (?,?,1)')
+            ->execute([$sid, (int)$me['id']]);
+        $pdo->prepare('UPDATE players SET current_session_id = ? WHERE id = ?')
+            ->execute([$sid, (int)$me['id']]);
+
+        // Bots
+        $stmt = $pdo->prepare('INSERT INTO session_players(session_id, player_id) VALUES (?,?)');
+        foreach ($botIds as $bid) $stmt->execute([$sid, $bid]);
+
+        game_log($sid, $me['pseudo'] . ' lance un entraînement contre ' . count($botIds) . ' bots.');
+        $pdo->commit();
+
+        // Démarrage immédiat
+        $allIds = array_merge([(int)$me['id']], $botIds);
+        assign_roles($sid, $allIds);
+        snapshot_elos($sid);
+
+        db()->prepare("UPDATE game_sessions
+                       SET status='NIGHT', phase='NIGHT_WEREWOLF', round=1,
+                           phase_started_at=CURRENT_TIMESTAMP, phase_duration=45
+                       WHERE id=?")->execute([$sid]);
+
+        game_log($sid, 'La nuit tombe sur le village...');
+        game_log($sid, 'Les loups-garous se réveillent et désignent leur victime.', 'WEREWOLVES');
+
+        // Premier tour des bots
+        run_bots($sid);
+        advance_if_needed($sid);
+        run_bots($sid);
+        advance_if_needed($sid);
+
+        json_response(['session_id' => $sid]);
+    } catch (Exception $e) {
+        $pdo->rollBack();
+        json_error('Erreur : ' . $e->getMessage(), 500);
+    }
+}
+
+/** "phase|round|status" pour détecter une transition. */
+function phase_snapshot(int $sid): string {
+    $s = db()->prepare('SELECT phase, round, status FROM game_sessions WHERE id=?');
+    $s->execute([$sid]);
+    $r = $s->fetch();
+    return ($r['phase'] ?? '') . '|' . ($r['round'] ?? '') . '|' . ($r['status'] ?? '');
 }
 
 function role_fr(?string $r): string {

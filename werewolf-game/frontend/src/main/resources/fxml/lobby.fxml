@@ -76,7 +76,19 @@
 
                     <Label fx:id="errorLabel" styleClass="error" wrapText="true"/>
 
-                    <Region prefHeight="8"/>
+                    <Separator/>
+
+                    <VBox spacing="8">
+                        <Label text="ENTRAÎNEMENT" styleClass="muted"/>
+                        <Label text="Joue immédiatement contre des bots IA pour apprendre." styleClass="muted" wrapText="true"/>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="Joueurs :" styleClass="muted"/>
+                            <ComboBox fx:id="practiceSizeCombo" styleClass="dark-combo" prefWidth="90"/>
+                        </HBox>
+                        <Button fx:id="practiceBtn" text="🤖 Lancer un entraînement" onAction="#onPractice" styleClass="btn-ghost" maxWidth="Infinity"/>
+                    </VBox>
+
+                    <Region prefHeight="4"/>
 
                     <VBox spacing="6">
                         <Label text="💡  4 joueurs minimum pour démarrer" styleClass="muted"/>

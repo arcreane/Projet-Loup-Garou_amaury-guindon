@@ -36,6 +36,8 @@ public class LobbyController {
     @FXML private Button             historyBtn;
     @FXML private Button             profileBtn;
     @FXML private Button             invitationsBtn;
+    @FXML private Button             practiceBtn;
+    @FXML private ComboBox<Integer>  practiceSizeCombo;
     @FXML private Label              errorLabel;
     @FXML private javafx.scene.layout.StackPane rootPane;
     @FXML private javafx.scene.layout.Region    bgImage;
@@ -50,8 +52,13 @@ public class LobbyController {
         welcomeLabel.setText(Session.avatarUrl + "  " + Session.fullTag());
         eloLabel.setText("⚔  " + Session.elo + " ELO");
 
-        Label empty = new Label("Aucune partie en attente.\nCréez-en une à droite !");
-        empty.setStyle("-fx-text-fill: -palette-parchment-2; -fx-font-family: 'IM Fell English','Georgia',serif; -fx-font-size: 15px; -fx-text-alignment: center;");
+        if (practiceSizeCombo != null) {
+            practiceSizeCombo.setItems(FXCollections.observableArrayList(4, 5, 6, 7, 8));
+            practiceSizeCombo.setValue(5);
+        }
+
+        Label empty = new Label("Aucune partie en attente.\nCréez-en une ou lancez un entraînement.");
+        empty.setStyle("-fx-text-fill: -text-muted; -fx-font-size: 14px; -fx-text-alignment: center;");
         gameList.setPlaceholder(empty);
 
         refresh();
@@ -65,6 +72,20 @@ public class LobbyController {
     }
 
     @FXML private void onProfile() { stopPolling(); Router.go("profile.fxml"); }
+
+    @FXML
+    private void onPractice() {
+        int total = practiceSizeCombo.getValue() == null ? 5 : practiceSizeCombo.getValue();
+        practiceBtn.setDisable(true);
+        runAsync(() -> {
+            int sid = svc.createPracticeGame(total);
+            Session.currentGameId = sid;
+            Platform.runLater(() -> {
+                stopPolling();
+                Router.go("game.fxml");   // démarrage direct, pas de WaitingRoom
+            });
+        });
+    }
 
     @FXML
     private void onInvitations() {

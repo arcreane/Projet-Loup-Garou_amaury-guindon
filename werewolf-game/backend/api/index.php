@@ -37,8 +37,13 @@ if ($path === 'history'      && $verb === 'GET') { require __DIR__ . '/games.php
 if ($path === 'leaderboard'  && $verb === 'GET') { require __DIR__ . '/games.php'; handle_leaderboard(); }
 
 // --- Lobby ---
-if ($path === 'games' && $verb === 'GET')  { require __DIR__ . '/games.php'; handle_list_games();  }
-if ($path === 'games' && $verb === 'POST') { require __DIR__ . '/games.php'; handle_create_game(); }
+if ($path === 'games' && $verb === 'GET')  { require __DIR__ . '/games.php'; handle_list_games();      }
+if ($path === 'games' && $verb === 'POST') { require __DIR__ . '/games.php'; handle_create_game();     }
+if ($path === 'games/practice' && $verb === 'POST') {
+    require __DIR__ . '/games.php';
+    require __DIR__ . '/game_logic.php';
+    handle_create_practice();
+}
 
 // --- Jeu : /games/{id}/... ---
 if (preg_match('#^games/(\d+)/([a-z_]+)$#', $path, $m)) {
