@@ -201,6 +201,16 @@ function kill_player(int $sid, int $pid, string $reason, bool $allowHunterTrigge
     db()->prepare('UPDATE session_players SET is_alive=0 WHERE session_id=? AND player_id=?')->execute([$sid, $pid]);
     game_log($sid, $row['pseudo'] . ' est mort. ' . $reason . '. Il était ' . role_fr($row['role']) . '.');
 
+    // Réaction IA des bots
+    if (file_exists(__DIR__ . '/ai_bots.php')) {
+        require_once __DIR__ . '/ai_bots.php';
+        ai_event($sid, 'death', [
+            'pseudo' => $row['pseudo'],
+            'role'   => $row['role'],
+            'cause'  => $reason,
+        ]);
+    }
+
     if ($row['role'] === 'HUNTER' && $allowHunterTrigger) {
         // Ouvre la fenêtre de tir : le client du chasseur recevra pending_hunter_id et affichera un dialog
         db()->prepare('UPDATE game_sessions SET pending_hunter_id=?, phase_started_at=CURRENT_TIMESTAMP WHERE id=?')
@@ -253,6 +263,11 @@ function go_to_phase(int $sid, string $phase, int $duration, ?string $status = n
     } else {
         db()->prepare("UPDATE game_sessions SET phase=?, phase_duration=?, phase_started_at=CURRENT_TIMESTAMP WHERE id=?")
             ->execute([$phase, $duration, $sid]);
+    }
+    // Réaction IA des bots sur changement de phase
+    if (file_exists(__DIR__ . '/ai_bots.php')) {
+        require_once __DIR__ . '/ai_bots.php';
+        ai_event($sid, 'phase_change', ['phase' => $phase]);
     }
 }
 

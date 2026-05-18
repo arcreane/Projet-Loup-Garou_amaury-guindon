@@ -155,6 +155,38 @@ Le client JavaFX appelle `GET /state` **toutes les 2 secondes** via une `Timelin
 - `FadeTransition` : animation sur changement de phase / élimination
 - **CSS sombre** : dégradés violets, ambiance mystère, hover/focus stylisés
 
+## 🤖 Activer l'IA Gemini pour les bots (optionnel)
+
+Par défaut, les bots du mode entraînement utilisent des phrases pré-écrites (30 messages génériques). Tu peux activer des dialogues **générés par IA Google Gemini** (gratuit) pour des réactions contextuelles aux événements du jeu.
+
+### Obtenir une clé Gemini (2 min, gratuit)
+
+1. Va sur https://aistudio.google.com/apikey
+2. Connecte-toi avec un compte Google
+3. **Create API key** → choisis ou crée un projet
+4. Copie la clé (format `AIzaSy...`)
+
+> Tier gratuit : 60 requêtes/min, 1500/jour. Sans carte bancaire.
+
+### Configuration
+
+```bash
+cd backend/api/
+cp config.local.example.php config.local.php
+# édite config.local.php et colle ta clé dans GEMINI_API_KEY
+```
+
+Le fichier `config.local.php` est ignoré par git, ta clé reste privée.
+
+### Comportement
+
+Les bots réagissent automatiquement à :
+- **Changement de phase** (nuit qui tombe, jour qui se lève, vote)
+- **Mort d'un joueur** (commentaire selon le rôle révélé)
+- **Vote du jour** (réaction aux soupçons)
+
+Throttling : max 1 message IA toutes les 3s par partie pour éviter la surcharge. Les bots restent dans leur rôle (les loups bluffent, les villageois doutent).
+
 ## Limites (proof of concept)
 
 - Authentification simpliste (token statique en BDD, pas de TTL)

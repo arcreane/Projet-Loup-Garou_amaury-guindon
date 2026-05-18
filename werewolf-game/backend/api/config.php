@@ -3,11 +3,21 @@
 // Configuration générale + helpers DB / HTTP
 // =====================================================
 
+// --- Charger les secrets locaux EN PREMIER (gitignored) ---
+// Pour activer l'IA Gemini : copie config.local.example.php en
+// config.local.php et renseigne ta clé GEMINI_API_KEY.
+$__localConfig = __DIR__ . '/config.local.php';
+if (file_exists($__localConfig)) require_once $__localConfig;
+
 // --- Paramètres de connexion MySQL ---
-define('DB_HOST', '127.0.0.1:3307');
-define('DB_NAME', 'werewolf');
-define('DB_USER', 'root');
-define('DB_PASS', '');
+if (!defined('DB_HOST')) define('DB_HOST', '127.0.0.1:3307');
+if (!defined('DB_NAME')) define('DB_NAME', 'werewolf');
+if (!defined('DB_USER')) define('DB_USER', 'root');
+if (!defined('DB_PASS')) define('DB_PASS', '');
+
+// --- Clé API Gemini (chat IA des bots). Vide = bots utilisent les phrases pré-écrites ---
+if (!defined('GEMINI_API_KEY')) define('GEMINI_API_KEY', '');
+if (!defined('GEMINI_MODEL'))   define('GEMINI_MODEL', 'gemini-1.5-flash-latest');
 
 // CORS minimal pour autoriser l'appel depuis JavaFX (HttpClient)
 header('Access-Control-Allow-Origin: *');

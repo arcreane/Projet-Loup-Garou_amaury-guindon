@@ -247,6 +247,18 @@ function handle_vote(int $sid): void {
             ->execute([$target, $sid, $me['id'], $phase, $session['round']]);
     }
 
+    // Réaction IA des bots sur un vote du jour (uniquement, pas de spoiler la nuit)
+    if ($phase === 'DAY_VOTE' && file_exists(__DIR__ . '/ai_bots.php')) {
+        require_once __DIR__ . '/ai_bots.php';
+        $tg = db()->prepare('SELECT pseudo FROM players WHERE id=?');
+        $tg->execute([$target]);
+        $targetName = $tg->fetchColumn();
+        ai_event($sid, 'vote_cast', [
+            'voter'  => $me['pseudo'],
+            'target' => $targetName ?: 'quelqu\'un',
+        ]);
+    }
+
     advance_if_needed($sid);
     json_response(['ok' => true]);
 }

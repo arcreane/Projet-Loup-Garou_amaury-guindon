@@ -44,6 +44,7 @@ CREATE TABLE game_sessions (
     phase_duration    INT NOT NULL DEFAULT 60,
     winner_team       ENUM('VILLAGERS','WEREWOLVES') DEFAULT NULL,
     pending_hunter_id INT DEFAULT NULL,
+    last_ai_chat_at   TIMESTAMP NULL DEFAULT NULL,
     created_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     ended_at          TIMESTAMP NULL DEFAULT NULL,
     INDEX idx_status (status)
