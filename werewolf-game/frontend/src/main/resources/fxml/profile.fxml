@@ -21,6 +21,7 @@
     </top>
 
     <center>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="transparent-scroll">
         <HBox spacing="20">
             <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
 
@@ -51,7 +52,7 @@
             </VBox>
 
             <!-- ============ AMIS ============ -->
-            <VBox spacing="12" HBox.hgrow="ALWAYS" styleClass="card">
+            <VBox spacing="12" HBox.hgrow="ALWAYS" maxHeight="-Infinity" alignment="TOP_LEFT" styleClass="card">
                 <padding><Insets top="22" right="22" bottom="22" left="22"/></padding>
                 <Label text="🤝 Compagnons" styleClass="title-m"/>
 
@@ -64,7 +65,7 @@
 
                 <Separator/>
 
-                <TabPane VBox.vgrow="ALWAYS" tabClosingPolicy="UNAVAILABLE">
+                <TabPane prefHeight="380" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
                         <Tab text="Amis">
                             <content>
@@ -103,5 +104,6 @@
                 </TabPane>
             </VBox>
         </HBox>
+        </ScrollPane>
     </center>
 </BorderPane>

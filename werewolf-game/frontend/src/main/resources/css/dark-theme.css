@@ -486,6 +486,17 @@
     -fx-font-size: 18px;
 }
 
+/* ---------- ScrollPane transparent (pour pages scrollables) ---------- */
+.transparent-scroll,
+.transparent-scroll > .viewport,
+.transparent-scroll > .corner {
+    -fx-background-color: transparent;
+}
+.transparent-scroll {
+    -fx-padding: 0;
+    -fx-background-insets: 0;
+}
+
 /* ---------- TabPane (onglets style médiéval) ---------- */
 .tab-pane {
     -fx-tab-min-height: 32;
