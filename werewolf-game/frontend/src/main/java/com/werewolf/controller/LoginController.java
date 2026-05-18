@@ -8,12 +8,14 @@ import com.werewolf.service.ThemeService;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
 import java.util.List;
@@ -44,8 +46,16 @@ public class LoginController {
 
         if (rootPane != null) ThemeService.applyNight(rootPane);
 
-        // Petite animation de "respiration" sur la lune
         if (moonDeco != null) {
+            // Clip circulaire pour masquer les coins carrés de moon.png
+            Circle clip = new Circle();
+            clip.centerXProperty().bind(Bindings.divide(moonDeco.widthProperty(), 2));
+            clip.centerYProperty().bind(Bindings.divide(moonDeco.heightProperty(), 2));
+            clip.radiusProperty().bind(Bindings.divide(
+                    Bindings.min(moonDeco.widthProperty(), moonDeco.heightProperty()), 2));
+            moonDeco.setClip(clip);
+
+            // Animation de respiration verticale
             TranslateTransition tt = new TranslateTransition(Duration.seconds(4), moonDeco);
             tt.setFromY(0);
             tt.setToY(-12);

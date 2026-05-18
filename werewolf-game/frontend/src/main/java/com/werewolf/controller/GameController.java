@@ -85,7 +85,16 @@ public class GameController {
             dynamicBg.prefWidthProperty().bind(((javafx.scene.layout.StackPane) dynamicBg.getParent()).widthProperty());
             dynamicBg.prefHeightProperty().bind(((javafx.scene.layout.StackPane) dynamicBg.getParent()).heightProperty());
         }
-        if (skyBody != null) skyBody.setOpacity(0);
+        if (skyBody != null) {
+            skyBody.setOpacity(0);
+            // Clip circulaire pour masquer les coins carrés de moon.png / sun.png
+            javafx.scene.shape.Circle clip = new javafx.scene.shape.Circle();
+            clip.centerXProperty().bind(javafx.beans.binding.Bindings.divide(skyBody.widthProperty(), 2));
+            clip.centerYProperty().bind(javafx.beans.binding.Bindings.divide(skyBody.heightProperty(), 2));
+            clip.radiusProperty().bind(javafx.beans.binding.Bindings.divide(
+                    javafx.beans.binding.Bindings.min(skyBody.widthProperty(), skyBody.heightProperty()), 2));
+            skyBody.setClip(clip);
+        }
 
         targetList.setCellFactory(lv -> new ListCell<>() {
             @Override protected void updateItem(Player p, boolean empty) {
