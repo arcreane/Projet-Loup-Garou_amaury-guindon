@@ -51,6 +51,38 @@
         linear-gradient(to bottom, #1a1208 0%, #2a1810 50%, #0f0805 100%);
 }
 
+/* ---------- Fonds d'écran via CSS (couverture totale fiable) ---------- */
+.bg-night {
+    -fx-background-image: url("../images/backgrounds/night.jpg");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+.bg-day {
+    -fx-background-image: url("../images/backgrounds/day.jpg");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+.bg-parchment {
+    -fx-background-image: url("../images/backgrounds/parchment.jpg");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+.bg-tavern {
+    -fx-background-image: url("../images/backgrounds/tavern.jpg");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+.bg-campfire {
+    -fx-background-image: url("../images/ui/campfire_waiting_room.gif");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+
 /* ---------- Cartes parchemin ---------- */
 .card {
     -fx-background-color:

@@ -37,14 +37,7 @@ public class WaitingRoomController {
 
     @FXML
     public void initialize() {
-        // Le gif animé du feu de camp si présent, sinon parchemin
-        if (rootPane != null) {
-            if (ThemeService.has("ui/campfire_waiting_room.gif")) {
-                ThemeService.applyBackground(rootPane, "ui/campfire_waiting_room.gif", true);
-            } else {
-                ThemeService.applyParchment(rootPane);
-            }
-        }
+        if (rootPane != null) ThemeService.applyCampfire(rootPane);
         startBtn.setDisable(true);
         gameLabel.setText("Partie #" + Session.currentGameId);
         poll();

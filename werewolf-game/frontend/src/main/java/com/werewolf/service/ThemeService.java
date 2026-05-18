@@ -29,10 +29,17 @@ public final class ThemeService {
 
     private ThemeService() {}
 
-    public static void applyParchment(Region region) { applyBackground(region, "backgrounds/parchment.jpg", true); }
-    public static void applyTavern   (Region region) { applyBackground(region, "backgrounds/tavern.jpg",    true); }
-    public static void applyNight    (Region region) { applyBackground(region, "backgrounds/night.jpg",     true); }
-    public static void applyDay      (Region region) { applyBackground(region, "backgrounds/day.jpg",       true); }
+    public static void applyParchment(Region region) { applyClass(region, "bg-parchment"); }
+    public static void applyTavern   (Region region) { applyClass(region, "bg-tavern");    }
+    public static void applyNight    (Region region) { applyClass(region, "bg-night");     }
+    public static void applyDay      (Region region) { applyClass(region, "bg-day");       }
+    public static void applyCampfire (Region region) { applyClass(region, "bg-campfire");  }
+
+    /** Toggle exclusif d'une classe bg-* sur la région (couverture native via CSS). */
+    public static void applyClass(Region region, String cssClass) {
+        region.getStyleClass().removeAll("bg-night","bg-day","bg-parchment","bg-tavern","bg-campfire");
+        region.getStyleClass().add(cssClass);
+    }
 
     /**
      * Applique une image en background avec couverture totale (style "cover" CSS).

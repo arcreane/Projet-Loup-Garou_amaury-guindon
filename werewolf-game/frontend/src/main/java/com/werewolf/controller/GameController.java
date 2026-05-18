@@ -495,9 +495,8 @@ public class GameController {
 
         // Background image dynamique
         if (dynamicBg != null) {
-            ThemeService.applyBackground(dynamicBg,
-                    isDay ? "backgrounds/day.jpg" : "backgrounds/night.jpg",
-                    true);
+            if (isDay) ThemeService.applyDay(dynamicBg);
+            else       ThemeService.applyNight(dynamicBg);
             FadeTransition ft = new FadeTransition(Duration.seconds(1.2), dynamicBg);
             ft.setFromValue(0.0);
             ft.setToValue(1.0);

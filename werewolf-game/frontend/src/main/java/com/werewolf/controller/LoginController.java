@@ -42,8 +42,7 @@ public class LoginController {
         avatarCombo.setItems(FXCollections.observableArrayList(AVATARS));
         avatarCombo.setValue("🌕");
 
-        // Fond parchemin (si l'image existe, sinon dégradé CSS)
-        if (rootPane != null) ThemeService.applyBackground(rootPane, "backgrounds/night.jpg", true);
+        if (rootPane != null) ThemeService.applyNight(rootPane);
 
         // Petite animation de "respiration" sur la lune
         if (moonDeco != null) {
