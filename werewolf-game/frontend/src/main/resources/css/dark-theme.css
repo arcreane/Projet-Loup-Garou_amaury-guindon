@@ -54,7 +54,7 @@
 /* ---------- Cartes parchemin ---------- */
 .card {
     -fx-background-color:
-        linear-gradient(to bottom right, rgba(232,216,176,0.95), rgba(201,179,136,0.92));
+        linear-gradient(to bottom right, rgba(232,216,176,0.99), rgba(201,179,136,0.98));
     -fx-background-radius: 6;
     -fx-border-color: -palette-ink-2;
     -fx-border-width: 2;
@@ -66,10 +66,10 @@
     -fx-text-fill: -palette-ink;
 }
 
-/* Carte sombre (utilisée en jeu pour les panels) */
+/* Carte sombre (utilisée en jeu pour les panels) - quasi-opaque */
 .card-dark {
     -fx-background-color:
-        linear-gradient(to bottom, rgba(20,15,30,0.88), rgba(10,8,18,0.94));
+        linear-gradient(to bottom, rgba(20,15,30,0.97), rgba(10,8,18,0.99));
     -fx-background-radius: 6;
     -fx-border-color: -palette-gold-dark;
     -fx-border-width: 2;
@@ -231,16 +231,17 @@
 .btn-danger:hover { -fx-background-color: linear-gradient(to bottom, -palette-blood, -palette-blood-dark); }
 
 /* ---------- Listes ---------- */
-.dark-list, .dark-list .list-cell {
-    -fx-background-color: rgba(40,28,20,0.7);
-    -fx-control-inner-background: rgba(40,28,20,0.7);
-    -fx-text-fill: -palette-parchment;
+.dark-list {
+    -fx-background-color: rgba(20,15,12,0.95);
+    -fx-control-inner-background: rgba(20,15,12,0.95);
     -fx-background-radius: 3;
     -fx-border-color: -palette-gold-dark;
     -fx-border-width: 1;
     -fx-border-radius: 3;
 }
 .dark-list .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: -palette-parchment;
     -fx-padding: 9 14 9 14;
     -fx-border-color: transparent transparent rgba(201,164,76,0.15) transparent;
     -fx-font-family: "IM Fell English", "Georgia", serif;
@@ -251,18 +252,24 @@
     -fx-text-fill: -palette-parchment;
 }
 .dark-list .list-cell:filled:hover {
-    -fx-background-color: rgba(201,164,76,0.18);
+    -fx-background-color: rgba(201,164,76,0.22);
 }
 
-/* Variante parchemin (sur cartes claires) */
-.card .dark-list, .card .dark-list .list-cell {
-    -fx-background-color: rgba(255,245,220,0.6);
-    -fx-control-inner-background: rgba(255,245,220,0.6);
-    -fx-text-fill: -palette-ink;
+/* Variante parchemin (listes dans une carte parchemin claire) */
+.card .dark-list {
+    -fx-background-color: rgba(60,40,25,0.92);
+    -fx-control-inner-background: rgba(60,40,25,0.92);
+}
+.card .dark-list .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: -palette-parchment;
 }
 .card .dark-list .list-cell:filled:selected {
     -fx-background-color: linear-gradient(to right, -palette-blood, -palette-blood-dark);
     -fx-text-fill: -palette-parchment;
+}
+.card .dark-list .list-cell:filled:hover {
+    -fx-background-color: rgba(201,164,76,0.25);
 }
 
 .dark-list.logs .list-cell {

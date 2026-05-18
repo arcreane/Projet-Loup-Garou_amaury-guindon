@@ -9,40 +9,37 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Region;
 
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Gestion centralisée des fonds d'écran et images thématiques.
- * Si une image est absente du classpath, on log et on ne fait rien
- * (le CSS de fallback reste appliqué).
+ * Toutes les images sont cachées : on ne décode jamais 2 fois le même PNG/JPG.
  *
  * Structure attendue :
  *   /images/backgrounds/  - night.jpg, day.jpg, parchment.jpg, tavern.jpg
  *   /images/roles/        - villager.png, werewolf.png, seer.png, witch.png, hunter.png
- *   /images/ui/           - moon.png, sun.png, lantern.png, scroll.png, fire.png
+ *   /images/ui/           - moon.png, sun.png, lantern.png, scroll.png, fire.png, campfire_*.gif
  */
 public final class ThemeService {
 
-    private ThemeService() {}
+    private static final Map<String, Image> CACHE = new HashMap<>();
 
-    // ----- Helpers haut niveau -----
+    private ThemeService() {}
 
     public static void applyParchment(Region region) { applyBackground(region, "backgrounds/parchment.jpg", true); }
     public static void applyTavern   (Region region) { applyBackground(region, "backgrounds/tavern.jpg",    true); }
     public static void applyNight    (Region region) { applyBackground(region, "backgrounds/night.jpg",     true); }
     public static void applyDay      (Region region) { applyBackground(region, "backgrounds/day.jpg",       true); }
 
-    /**
-     * Applique une image en background avec couverture totale (style "cover").
-     * @param coverFill true = remplit en gardant les proportions (peut rogner)
-     */
     public static void applyBackground(Region region, String relativePath, boolean coverFill) {
         Image img = load(relativePath);
         if (img == null) return;
         BackgroundSize size = new BackgroundSize(
                 BackgroundSize.AUTO, BackgroundSize.AUTO,
                 true, true,
-                false,        // contain = non
-                coverFill     // cover = oui
+                false,
+                coverFill
         );
         BackgroundImage bg = new BackgroundImage(
                 img,
@@ -59,10 +56,17 @@ public final class ThemeService {
         return load("roles/" + roleName.toLowerCase() + ".png");
     }
 
+    /** Charge une image avec cache. Aucun décodage répété. */
     public static Image load(String relativePath) {
+        Image cached = CACHE.get(relativePath);
+        if (cached != null) return cached;
         try {
             URL u = ThemeService.class.getResource("/images/" + relativePath);
-            return u == null ? null : new Image(u.toExternalForm());
+            if (u == null) return null;
+            // background loading + cache permanent
+            Image img = new Image(u.toExternalForm(), true);
+            CACHE.put(relativePath, img);
+            return img;
         } catch (Exception e) {
             return null;
         }

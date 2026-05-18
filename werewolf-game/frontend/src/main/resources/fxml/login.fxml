@@ -11,28 +11,20 @@
 
     <!-- Lune décorative en haut -->
     <Region fx:id="moonDeco" styleClass="moon" StackPane.alignment="TOP_CENTER">
-        <StackPane.margin><Insets top="32"/></StackPane.margin>
+        <StackPane.margin><Insets top="24"/></StackPane.margin>
     </Region>
 
-    <!-- Lueur de lanterne en bas gauche -->
+    <!-- Lueurs douces dans les coins inférieurs (lanternes invisibles, juste la lumière) -->
     <Region styleClass="lantern-glow" StackPane.alignment="BOTTOM_LEFT">
-        <StackPane.margin><Insets bottom="-60" left="-60"/></StackPane.margin>
+        <StackPane.margin><Insets bottom="-80" left="-80"/></StackPane.margin>
     </Region>
-    <Region styleClass="lantern" StackPane.alignment="BOTTOM_LEFT">
-        <StackPane.margin><Insets bottom="20" left="40"/></StackPane.margin>
-    </Region>
-
-    <!-- Lanterne miroir à droite -->
     <Region styleClass="lantern-glow" StackPane.alignment="BOTTOM_RIGHT">
-        <StackPane.margin><Insets bottom="-60" right="-60"/></StackPane.margin>
-    </Region>
-    <Region styleClass="lantern" StackPane.alignment="BOTTOM_RIGHT">
-        <StackPane.margin><Insets bottom="20" right="40"/></StackPane.margin>
+        <StackPane.margin><Insets bottom="-80" right="-80"/></StackPane.margin>
     </Region>
 
     <!-- Carte parchemin centrée -->
-    <VBox alignment="CENTER" spacing="14" maxWidth="420" styleClass="card">
-        <padding><Insets top="40" right="50" bottom="40" left="50"/></padding>
+    <VBox alignment="CENTER" spacing="14" maxWidth="420" maxHeight="-Infinity" styleClass="card">
+        <padding><Insets top="36" right="50" bottom="36" left="50"/></padding>
 
         <Label text="Loup-Garou" styleClass="title-xl"/>
         <Label text="✦  De Thiercelieux  ✦" styleClass="ornament"/>
