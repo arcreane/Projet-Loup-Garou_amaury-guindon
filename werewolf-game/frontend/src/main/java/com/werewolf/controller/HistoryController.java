@@ -6,11 +6,13 @@ import com.werewolf.model.HistoryEntry;
 import com.werewolf.model.Role;
 import com.werewolf.service.GameService;
 import com.werewolf.service.Session;
+import com.werewolf.service.ThemeService;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +23,13 @@ public class HistoryController {
     @FXML private ListView<String> leaderboardList;
     @FXML private Label            myStatsLabel;
     @FXML private Button           backBtn;
+    @FXML private BorderPane       rootPane;
 
     private final GameService svc = new GameService();
 
     @FXML
     public void initialize() {
+        if (rootPane != null) ThemeService.applyParchment(rootPane);
         myStatsLabel.setText(Session.avatarUrl + "  " + Session.pseudo
                 + "   ·   ELO " + Session.elo
                 + "   ·   " + Session.gamesWon + " victoires / " + Session.gamesPlayed + " parties");

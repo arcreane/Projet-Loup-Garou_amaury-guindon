@@ -4,6 +4,7 @@ import com.werewolf.Router;
 import com.werewolf.service.AuthService;
 import com.werewolf.service.GameService;
 import com.werewolf.service.Session;
+import com.werewolf.service.ThemeService;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
@@ -12,6 +13,7 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
 import java.util.List;
@@ -30,6 +32,7 @@ public class LoginController {
     @FXML private Button        registerBtn;
     @FXML private Label         errorLabel;
     @FXML private Region        moonDeco;
+    @FXML private StackPane     rootPane;
 
     private final AuthService auth = new AuthService();
     private final GameService svc  = new GameService();
@@ -38,6 +41,9 @@ public class LoginController {
     public void initialize() {
         avatarCombo.setItems(FXCollections.observableArrayList(AVATARS));
         avatarCombo.setValue("🌕");
+
+        // Fond parchemin (si l'image existe, sinon dégradé CSS)
+        if (rootPane != null) ThemeService.applyBackground(rootPane, "backgrounds/night.jpg", true);
 
         // Petite animation de "respiration" sur la lune
         if (moonDeco != null) {

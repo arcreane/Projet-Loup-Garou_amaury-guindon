@@ -4,6 +4,7 @@ import com.werewolf.Router;
 import com.werewolf.model.GameSession;
 import com.werewolf.service.GameService;
 import com.werewolf.service.Session;
+import com.werewolf.service.ThemeService;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -11,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import javafx.util.Duration;
 
 import java.util.List;
@@ -27,12 +29,14 @@ public class LobbyController {
     @FXML private Button             joinBtn;
     @FXML private Button             historyBtn;
     @FXML private Label              errorLabel;
+    @FXML private BorderPane         rootPane;
 
     private final GameService svc = new GameService();
     private Timeline poller;
 
     @FXML
     public void initialize() {
+        if (rootPane != null) ThemeService.applyTavern(rootPane);
         welcomeLabel.setText(Session.avatarUrl + "  " + Session.pseudo);
         eloLabel.setText("ELO : " + Session.elo
                 + "   ·   " + Session.gamesWon + " W / " + Session.gamesPlayed + " G");

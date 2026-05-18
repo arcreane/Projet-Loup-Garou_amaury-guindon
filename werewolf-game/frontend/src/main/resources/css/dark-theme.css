@@ -420,24 +420,57 @@
     -fx-border-width: 1;
 }
 
-/* ---------- Lune décorative (SVG / Region) ---------- */
+/* ---------- Lune décorative (image PNG transparente) ---------- */
 .moon {
-    -fx-background-color: radial-gradient(center 35% 35%, radius 60%,
-        #fffae0 0%, #e8d8b0 40%, #c9a44c 100%);
-    -fx-background-radius: 50%;
-    -fx-effect: dropshadow(gaussian, rgba(255,250,224,0.7), 30, 0.6, 0, 0);
-    -fx-pref-width: 80;
-    -fx-pref-height: 80;
-    -fx-min-width: 80;
-    -fx-min-height: 80;
+    -fx-background-image: url("../images/ui/moon.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-background-position: center;
+    -fx-effect: dropshadow(gaussian, rgba(255,250,224,0.85), 40, 0.7, 0, 0);
+    -fx-pref-width: 160;
+    -fx-pref-height: 160;
+    -fx-min-width: 160;
+    -fx-min-height: 160;
+}
+.sun {
+    -fx-background-image: url("../images/ui/sun.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-background-position: center;
+    -fx-effect: dropshadow(gaussian, rgba(255,180,80,0.85), 50, 0.7, 0, 0);
+    -fx-pref-width: 180;
+    -fx-pref-height: 180;
+    -fx-min-width: 180;
+    -fx-min-height: 180;
 }
 
 /* ---------- Lanterne décorative ---------- */
-.lantern-glow {
-    -fx-background-color: radial-gradient(center 50% 50%, radius 60%,
-        rgba(255,180,80,0.5) 0%, transparent 100%);
-    -fx-pref-width: 200;
+.lantern {
+    -fx-background-image: url("../images/ui/lantern.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-background-position: center;
+    -fx-pref-width: 140;
     -fx-pref-height: 200;
+    -fx-min-width: 140;
+    -fx-min-height: 200;
+    -fx-effect: dropshadow(gaussian, rgba(255,180,80,0.6), 30, 0.4, 0, 0);
+}
+.lantern-glow {
+    -fx-background-color: radial-gradient(center 50% 50%, radius 50%,
+        rgba(255,180,80,0.45) 0%, rgba(255,140,60,0.2) 30%, transparent 100%);
+    -fx-pref-width: 320;
+    -fx-pref-height: 320;
+}
+
+/* ---------- Parchemin (sur image scroll.png) ---------- */
+.scroll-decor {
+    -fx-background-image: url("../images/ui/scroll.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-background-position: center;
+    -fx-pref-width: 600;
+    -fx-pref-height: 400;
 }
 
 /* ---------- Séparateur orné ---------- */

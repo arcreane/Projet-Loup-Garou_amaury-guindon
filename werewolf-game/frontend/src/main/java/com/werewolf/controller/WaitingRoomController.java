@@ -5,6 +5,7 @@ import com.werewolf.model.Player;
 import com.werewolf.model.StateResponse;
 import com.werewolf.service.GameService;
 import com.werewolf.service.Session;
+import com.werewolf.service.ThemeService;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -14,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.BorderPane;
 import javafx.util.Duration;
 
 /**
@@ -27,6 +29,7 @@ public class WaitingRoomController {
     @FXML private Button startBtn;
     @FXML private Button leaveBtn;
     @FXML private Label errorLabel;
+    @FXML private BorderPane rootPane;
 
     private final GameService svc = new GameService();
     private Timeline poller;
@@ -34,6 +37,14 @@ public class WaitingRoomController {
 
     @FXML
     public void initialize() {
+        // Le gif animé du feu de camp si présent, sinon parchemin
+        if (rootPane != null) {
+            if (ThemeService.has("ui/campfire_waiting_room.gif")) {
+                ThemeService.applyBackground(rootPane, "ui/campfire_waiting_room.gif", true);
+            } else {
+                ThemeService.applyParchment(rootPane);
+            }
+        }
         startBtn.setDisable(true);
         gameLabel.setText("Partie #" + Session.currentGameId);
         poll();

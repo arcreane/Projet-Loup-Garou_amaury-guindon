@@ -6,6 +6,7 @@
 
 <StackPane xmlns:fx="http://javafx.com/fxml"
            fx:controller="com.werewolf.controller.LoginController"
+           fx:id="rootPane"
            styleClass="root-bg">
 
     <!-- Lune décorative en haut -->
@@ -15,7 +16,18 @@
 
     <!-- Lueur de lanterne en bas gauche -->
     <Region styleClass="lantern-glow" StackPane.alignment="BOTTOM_LEFT">
-        <StackPane.margin><Insets bottom="-40" left="-40"/></StackPane.margin>
+        <StackPane.margin><Insets bottom="-60" left="-60"/></StackPane.margin>
+    </Region>
+    <Region styleClass="lantern" StackPane.alignment="BOTTOM_LEFT">
+        <StackPane.margin><Insets bottom="20" left="40"/></StackPane.margin>
+    </Region>
+
+    <!-- Lanterne miroir à droite -->
+    <Region styleClass="lantern-glow" StackPane.alignment="BOTTOM_RIGHT">
+        <StackPane.margin><Insets bottom="-60" right="-60"/></StackPane.margin>
+    </Region>
+    <Region styleClass="lantern" StackPane.alignment="BOTTOM_RIGHT">
+        <StackPane.margin><Insets bottom="20" right="40"/></StackPane.margin>
     </Region>
 
     <!-- Carte parchemin centrée -->

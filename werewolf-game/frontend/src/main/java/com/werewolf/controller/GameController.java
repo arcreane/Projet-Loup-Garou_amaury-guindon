@@ -9,6 +9,7 @@ import com.werewolf.model.StateResponse;
 import com.werewolf.service.GameService;
 import com.werewolf.service.Session;
 import com.werewolf.service.SoundPlayer;
+import com.werewolf.service.ThemeService;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -354,6 +355,13 @@ public class GameController {
             a.setTitle("Vision de la Voyante");
             a.setHeaderText(target.pseudo);
             a.setContentText(r == null ? "Rôle inconnu." : "Cette personne est : " + r.label());
+            // Ajoute l'illustration du rôle si disponible
+            javafx.scene.image.Image img = (r == null) ? null : ThemeService.roleImage(r.name());
+            if (img != null) {
+                javafx.scene.image.ImageView iv = new javafx.scene.image.ImageView(img);
+                iv.setFitWidth(180); iv.setPreserveRatio(true);
+                a.setGraphic(iv);
+            }
             a.showAndWait();
         }));
         t.setOnFailed(e -> Platform.runLater(() -> actionHint.setText(t.getException().getMessage())));
@@ -421,7 +429,11 @@ public class GameController {
     private void showEndGame(StateResponse s) {
         Alert a = new Alert(Alert.AlertType.INFORMATION);
         a.setTitle("Fin de la partie");
-        a.setHeaderText("Vainqueur : " + (s.session.winnerTeam == null ? "?" : s.session.winnerTeam));
+        String winner = s.session.winnerTeam == null ? "?"
+                : ("VILLAGERS".equals(s.session.winnerTeam)
+                    ? "⚔ Les Villageois triomphent !"
+                    : "🐺 Les Loups-Garous dévorent le village");
+        a.setHeaderText(winner);
         StringBuilder sb = new StringBuilder();
         sb.append("Rôles révélés :\n");
         for (Player p : s.players) {
@@ -435,6 +447,15 @@ public class GameController {
             sb.append('\n');
         }
         a.setContentText(sb.toString());
+
+        // Image du camp vainqueur
+        String camp = "VILLAGERS".equals(s.session.winnerTeam) ? "villager" : "werewolf";
+        javafx.scene.image.Image img = ThemeService.roleImage(camp.toUpperCase());
+        if (img != null) {
+            javafx.scene.image.ImageView iv = new javafx.scene.image.ImageView(img);
+            iv.setFitWidth(220); iv.setPreserveRatio(true);
+            a.setGraphic(iv);
+        }
         a.setOnHidden(e -> {
             // Refresh ELO local depuis /me
             new Thread(() -> {
@@ -470,29 +491,35 @@ public class GameController {
     //              ANIMATIONS NUIT / JOUR
     // =====================================================
     private void applyDayNightTheme(String status) {
+        boolean isDay = "DAY".equals(status);
+
+        // Background image dynamique
         if (dynamicBg != null) {
-            dynamicBg.getStyleClass().removeAll("root-bg", "root-bg-day", "root-bg-parchment");
-            String cls = "DAY".equals(status) ? "root-bg-day" : "root-bg";
-            dynamicBg.getStyleClass().add(cls);
-            // Fondu doux du fond
+            ThemeService.applyBackground(dynamicBg,
+                    isDay ? "backgrounds/day.jpg" : "backgrounds/night.jpg",
+                    true);
             FadeTransition ft = new FadeTransition(Duration.seconds(1.2), dynamicBg);
             ft.setFromValue(0.0);
             ft.setToValue(1.0);
             ft.play();
         }
+
+        // Astre céleste : lune ou soleil + animation d'apparition
         if (skyBody != null) {
-            // La lune/soleil traverse le ciel : rotation + petit rebond
-            skyBody.setTranslateY(80);
+            skyBody.getStyleClass().removeAll("moon", "sun");
+            skyBody.getStyleClass().add(isDay ? "sun" : "moon");
+
+            skyBody.setTranslateY(120);
             skyBody.setOpacity(0);
-            FadeTransition fade = new FadeTransition(Duration.seconds(1.5), skyBody);
+            FadeTransition fade = new FadeTransition(Duration.seconds(1.8), skyBody);
             fade.setFromValue(0);
             fade.setToValue(1);
-            javafx.animation.TranslateTransition tt = new javafx.animation.TranslateTransition(Duration.seconds(1.5), skyBody);
-            tt.setFromY(80);
+            javafx.animation.TranslateTransition tt = new javafx.animation.TranslateTransition(Duration.seconds(1.8), skyBody);
+            tt.setFromY(120);
             tt.setToY(0);
             tt.setInterpolator(Interpolator.EASE_OUT);
-            ScaleTransition st = new ScaleTransition(Duration.seconds(0.8), skyBody);
-            st.setFromX(0.6); st.setFromY(0.6);
+            ScaleTransition st = new ScaleTransition(Duration.seconds(1.0), skyBody);
+            st.setFromX(0.5); st.setFromY(0.5);
             st.setToX(1.0); st.setToY(1.0);
             fade.play();
             tt.play();

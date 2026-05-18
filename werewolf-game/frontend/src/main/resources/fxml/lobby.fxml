@@ -6,6 +6,7 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.werewolf.controller.LobbyController"
+            fx:id="rootPane"
             styleClass="root-bg">
 
     <top>
