@@ -40,6 +40,12 @@ public class LobbyController {
         welcomeLabel.setText(Session.avatarUrl + "  " + Session.pseudo);
         eloLabel.setText("ELO : " + Session.elo
                 + "   ·   " + Session.gamesWon + " W / " + Session.gamesPlayed + " G");
+
+        // Texte affiché quand la liste est vide
+        Label empty = new Label("Aucune partie en attente.\nCréez-en une à droite !");
+        empty.setStyle("-fx-text-fill: -palette-parchment-2; -fx-font-family: 'IM Fell English','Georgia',serif; -fx-font-size: 15px; -fx-text-alignment: center;");
+        gameList.setPlaceholder(empty);
+
         refresh();
         poller = new Timeline(new KeyFrame(Duration.seconds(3), e -> refresh()));
         poller.setCycleCount(Timeline.INDEFINITE);

@@ -13,9 +13,14 @@ public class Main extends Application {
         FontLoader.loadAll();
         primary = stage;
         stage.setTitle("🌕 Loup-Garou");
+        // Taille initiale raisonnable, mais l'utilisateur peut redimensionner
+        // jusqu'à 600x400 si besoin (ou maximiser via le bouton standard)
+        stage.setWidth(1280);
+        stage.setHeight(800);
+        stage.setMinWidth(600);
+        stage.setMinHeight(400);
+        stage.setFullScreen(false);
         Router.go("login.fxml");
-        stage.setMinWidth(1024);
-        stage.setMinHeight(720);
         stage.show();
     }
 

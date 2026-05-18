@@ -41,14 +41,13 @@
                 </HBox>
             </VBox>
 
-            <VBox spacing="12" prefWidth="340" styleClass="card">
+            <VBox spacing="12" prefWidth="340" maxHeight="-Infinity" alignment="TOP_CENTER" styleClass="card">
                 <padding><Insets top="22" right="22" bottom="22" left="22"/></padding>
                 <Label text="✦  Convoquer un village" styleClass="title-m"/>
                 <TextField fx:id="newGameName" promptText="Nom de la partie..." styleClass="input"/>
                 <CheckBox  fx:id="rankedCheck" text="🏆 Partie classée (modifie l'ELO)"/>
                 <Button fx:id="createBtn" text="⚔ Créer la partie" onAction="#onCreate" styleClass="btn-primary" maxWidth="Infinity"/>
                 <Label fx:id="errorLabel" styleClass="error"/>
-                <Region VBox.vgrow="ALWAYS"/>
                 <Label text="✦  ✦  ✦" styleClass="ornament"/>
                 <Label text="Minimum 4 joueurs pour commencer." styleClass="muted"/>
                 <Label text="Les loups gagnent s'ils égalent les villageois." styleClass="muted"/>
