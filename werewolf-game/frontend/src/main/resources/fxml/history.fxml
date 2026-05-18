@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.werewolf.controller.HistoryController"
+            styleClass="root-bg">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="14" styleClass="topbar">
+            <padding><Insets top="16" right="20" bottom="16" left="20"/></padding>
+            <Label text="📜 Historique &amp; Classement" styleClass="title-l"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="myStatsLabel" styleClass="muted"/>
+            <Button fx:id="backBtn" text="← Retour" onAction="#onBack" styleClass="btn-ghost"/>
+        </HBox>
+    </top>
+
+    <center>
+        <HBox spacing="20">
+            <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+            <VBox spacing="10" HBox.hgrow="ALWAYS" styleClass="card">
+                <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+                <Label text="Vos 50 dernières parties" styleClass="title-m"/>
+                <ListView fx:id="historyList" VBox.vgrow="ALWAYS" styleClass="dark-list logs"/>
+            </VBox>
+
+            <VBox spacing="10" prefWidth="420" styleClass="card">
+                <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+                <Label text="🏆 Top 50 ELO" styleClass="title-m"/>
+                <ListView fx:id="leaderboardList" VBox.vgrow="ALWAYS" styleClass="dark-list logs"/>
+            </VBox>
+        </HBox>
+    </center>
+</BorderPane>

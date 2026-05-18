@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.werewolf.controller.LobbyController"
+            styleClass="root-bg">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="14" styleClass="topbar">
+            <padding><Insets top="16" right="20" bottom="16" left="20"/></padding>
+            <Label text="🌕 Lobby" styleClass="title-l"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="eloLabel" styleClass="badge"/>
+            <Label fx:id="welcomeLabel" styleClass="muted"/>
+            <Button fx:id="historyBtn" text="📜 Historique" onAction="#onHistory" styleClass="btn-ghost"/>
+        </HBox>
+    </top>
+
+    <center>
+        <HBox spacing="20">
+            <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+            <VBox spacing="10" HBox.hgrow="ALWAYS" styleClass="card">
+                <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+                <Label text="Parties en attente" styleClass="title-m"/>
+                <ListView fx:id="gameList" VBox.vgrow="ALWAYS" prefHeight="400" styleClass="dark-list"/>
+                <HBox spacing="10">
+                    <Button fx:id="refreshBtn" text="↻ Rafraîchir" onAction="#onRefresh" styleClass="btn-ghost"/>
+                    <Button fx:id="joinBtn"    text="Rejoindre"  onAction="#onJoin"    styleClass="btn-primary"/>
+                </HBox>
+            </VBox>
+
+            <VBox spacing="10" prefWidth="320" styleClass="card">
+                <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+                <Label text="Créer une partie" styleClass="title-m"/>
+                <TextField fx:id="newGameName" promptText="Nom de la partie" styleClass="input"/>
+                <CheckBox  fx:id="rankedCheck" text="🏆 Partie classée (affecte ELO)"/>
+                <Button fx:id="createBtn" text="Créer" onAction="#onCreate" styleClass="btn-primary" maxWidth="Infinity"/>
+                <Label fx:id="errorLabel" styleClass="error"/>
+                <Region VBox.vgrow="ALWAYS"/>
+                <Label text="💡 Minimum 4 joueurs pour démarrer" styleClass="muted"/>
+                <Label text="🏆 = partie classée   ·   ELO mis à jour à la fin" styleClass="muted"/>
+            </VBox>
+        </HBox>
+    </center>
+</BorderPane>

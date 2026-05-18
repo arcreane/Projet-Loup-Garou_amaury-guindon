@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.werewolf.controller.LoginController"
+           styleClass="root-bg">
+    <VBox alignment="CENTER" spacing="12" maxWidth="380" styleClass="card">
+        <padding><Insets top="32" right="40" bottom="32" left="40"/></padding>
+
+        <Label text="🌕 Loup-Garou" styleClass="title-xl"/>
+        <Label text="Connexion à votre village" styleClass="subtitle"/>
+
+        <TextField fx:id="pseudoField" promptText="Pseudo" styleClass="input"/>
+        <TextField fx:id="emailField"  promptText="Email (inscription)" styleClass="input"/>
+        <PasswordField fx:id="passwordField" promptText="Mot de passe" styleClass="input"/>
+
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Avatar :" styleClass="muted"/>
+            <ComboBox fx:id="avatarCombo" prefWidth="100" styleClass="dark-combo"/>
+            <Label text="(visible des autres joueurs)" styleClass="muted"/>
+        </HBox>
+
+        <HBox spacing="10" alignment="CENTER">
+            <Button fx:id="loginBtn"    text="Se connecter" onAction="#onLogin"    styleClass="btn-primary"/>
+            <Button fx:id="registerBtn" text="S'inscrire"   onAction="#onRegister" styleClass="btn-ghost"/>
+        </HBox>
+
+        <Label fx:id="errorLabel" styleClass="error"/>
+    </VBox>
+</StackPane>

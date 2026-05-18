@@ -1,0 +1,225 @@
+/* =========================================================
+   Loup-Garou - Thème sombre / ambiance mystère
+   ========================================================= */
+
+.root {
+    -fx-font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+    -fx-font-size: 13px;
+    -fx-text-fill: #e8e6e3;
+    -fx-base: #1d1c25;
+    -fx-background-color: transparent;
+}
+
+/* fond global avec dégradé */
+.root-bg {
+    -fx-background-color: linear-gradient(to bottom right, #15131a, #2a1f2e 60%, #1a1622);
+}
+
+/* cartes */
+.card {
+    -fx-background-color: rgba(38, 33, 50, 0.92);
+    -fx-background-radius: 14;
+    -fx-border-color: rgba(120, 85, 200, 0.25);
+    -fx-border-radius: 14;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 14, 0.1, 0, 4);
+}
+
+/* topbar */
+.topbar {
+    -fx-background-color: rgba(20, 17, 28, 0.7);
+    -fx-border-color: transparent transparent rgba(140, 100, 220, 0.3) transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* ----- Typographie ----- */
+.title-xl {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e9d8ff;
+}
+.title-l {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f0e3ff;
+}
+.title-m {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #cfb8ee;
+}
+.subtitle {
+    -fx-text-fill: #a99cc4;
+    -fx-font-style: italic;
+}
+.muted {
+    -fx-text-fill: #8a83a0;
+    -fx-font-size: 12px;
+}
+.error {
+    -fx-text-fill: #ff6c8a;
+    -fx-font-size: 12px;
+}
+.badge {
+    -fx-background-color: linear-gradient(to right, #7a4dd1, #c44f8a);
+    -fx-text-fill: white;
+    -fx-padding: 4 12 4 12;
+    -fx-background-radius: 12;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+.badge-ranked {
+    -fx-background-color: linear-gradient(to right, #e0a63c, #ff8c42);
+}
+.badge-casual {
+    -fx-background-color: linear-gradient(to right, #4a4358, #6a5478);
+}
+
+/* Chat panel */
+.chat-panel {
+    -fx-border-color: rgba(108, 209, 255, 0.35);
+}
+
+/* ----- Inputs ----- */
+.input, .text-field, .password-field {
+    -fx-background-color: rgba(50, 42, 70, 0.8);
+    -fx-text-fill: #f0eaff;
+    -fx-prompt-text-fill: #7c728e;
+    -fx-background-radius: 8;
+    -fx-border-color: rgba(140, 100, 220, 0.25);
+    -fx-border-radius: 8;
+    -fx-padding: 8 12 8 12;
+}
+.input:focused, .text-field:focused, .password-field:focused {
+    -fx-border-color: #b18cf2;
+}
+
+/* ----- Boutons ----- */
+.btn-primary {
+    -fx-background-color: linear-gradient(to bottom, #7e4ddb, #5a32a8);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 18 8 18;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+.btn-primary:hover { -fx-background-color: linear-gradient(to bottom, #9a6cf2, #7045c7); }
+.btn-primary:disabled { -fx-opacity: 0.4; }
+
+.btn-ghost {
+    -fx-background-color: transparent;
+    -fx-text-fill: #cfb8ee;
+    -fx-border-color: rgba(140, 100, 220, 0.4);
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 8 18 8 18;
+    -fx-cursor: hand;
+}
+.btn-ghost:hover { -fx-background-color: rgba(140, 100, 220, 0.15); }
+
+.btn-danger {
+    -fx-background-color: linear-gradient(to bottom, #c1395f, #8a1f3e);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 18 8 18;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+.btn-danger:hover { -fx-background-color: linear-gradient(to bottom, #e05378, #b1305a); }
+
+/* ----- Listes ----- */
+.dark-list, .dark-list .list-cell {
+    -fx-background-color: rgba(30, 26, 40, 0.6);
+    -fx-control-inner-background: rgba(30, 26, 40, 0.6);
+    -fx-text-fill: #e8e6e3;
+    -fx-background-radius: 8;
+}
+.dark-list .list-cell {
+    -fx-padding: 8 12 8 12;
+    -fx-border-color: transparent transparent rgba(140,100,220,0.1) transparent;
+}
+.dark-list .list-cell:filled:selected {
+    -fx-background-color: linear-gradient(to right, #7a4dd1, #5d34a4);
+    -fx-text-fill: white;
+}
+.dark-list .list-cell:filled:hover {
+    -fx-background-color: rgba(140, 100, 220, 0.18);
+}
+
+.dark-list.logs .list-cell {
+    -fx-font-family: "Consolas", "Courier New", monospace;
+    -fx-text-fill: #c8c2da;
+    -fx-font-size: 12px;
+}
+
+/* ----- TreeView ----- */
+.dark-tree {
+    -fx-background-color: rgba(30, 26, 40, 0.6);
+    -fx-control-inner-background: rgba(30, 26, 40, 0.6);
+    -fx-background-radius: 8;
+}
+.dark-tree .tree-cell {
+    -fx-text-fill: #e8e6e3;
+    -fx-padding: 4 8 4 8;
+    -fx-background-color: transparent;
+}
+.dark-tree .tree-cell:filled:selected {
+    -fx-background-color: rgba(140,100,220,0.3);
+    -fx-text-fill: white;
+}
+
+/* ----- ComboBox ----- */
+.dark-combo {
+    -fx-background-color: rgba(50, 42, 70, 0.8);
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+}
+.dark-combo .list-cell {
+    -fx-text-fill: #e8e6e3;
+    -fx-background-color: transparent;
+    -fx-padding: 6 10 6 10;
+}
+.dark-combo .arrow { -fx-background-color: #cfb8ee; }
+.dark-combo-popup .list-view {
+    -fx-background-color: #2a2238;
+}
+
+/* ----- ProgressBar (timer phase) ----- */
+.phase-timer .bar {
+    -fx-background-color: linear-gradient(to right, #ff6c8a, #b18cf2, #6ed1ff);
+    -fx-background-radius: 4;
+}
+.phase-timer .track {
+    -fx-background-color: rgba(0,0,0,0.4);
+    -fx-background-radius: 4;
+}
+.phase-timer {
+    -fx-pref-height: 8;
+}
+
+/* ----- ScrollBar (sobre) ----- */
+.scroll-bar:vertical, .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+.scroll-bar .thumb {
+    -fx-background-color: rgba(140, 100, 220, 0.4);
+    -fx-background-radius: 6;
+}
+.scroll-bar .thumb:hover { -fx-background-color: rgba(140, 100, 220, 0.7); }
+
+/* ----- Action panel emphasis ----- */
+.action-panel {
+    -fx-border-color: rgba(193, 57, 95, 0.4);
+}
+
+/* ----- Alert (dialogues) ----- */
+.dialog-pane {
+    -fx-background-color: #2a2238;
+}
+.dialog-pane .label, .dialog-pane .header-panel .label {
+    -fx-text-fill: #f0e3ff;
+}
+.dialog-pane .button {
+    -fx-background-color: linear-gradient(to bottom, #7e4ddb, #5a32a8);
+    -fx-text-fill: white;
+    -fx-background-radius: 6;
+}

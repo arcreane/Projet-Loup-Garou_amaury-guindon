@@ -1,0 +1,31 @@
+# ===== IDE =====
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# ===== Maven / Java =====
+target/
+build/
+out/
+*.class
+*.log
+hs_err_pid*
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===== Logs PHP / serveur =====
+*.log
+backend/logs/
+
+# ===== Données sensibles =====
+backend/api/config.local.php
+.env
+.env.local
+
+# ===== Outils =====
+.claude/

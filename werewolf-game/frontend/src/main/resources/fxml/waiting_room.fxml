@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.werewolf.controller.WaitingRoomController"
+            styleClass="root-bg">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="14" styleClass="topbar">
+            <padding><Insets top="16" right="20" bottom="16" left="20"/></padding>
+            <Label fx:id="gameLabel" styleClass="title-l"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="leaveBtn" text="Quitter" onAction="#onLeave" styleClass="btn-ghost"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox alignment="CENTER" spacing="20" maxWidth="600" styleClass="card">
+            <padding><Insets top="30" right="40" bottom="30" left="40"/></padding>
+            <Label text="🌒 En attente des joueurs..." styleClass="title-m"/>
+            <ListView fx:id="playerList" prefHeight="320" styleClass="dark-list"/>
+            <Button fx:id="startBtn" text="Démarrer la partie" onAction="#onStart"
+                    styleClass="btn-primary" maxWidth="Infinity"/>
+            <Label fx:id="errorLabel" styleClass="error"/>
+        </VBox>
+    </center>
+</BorderPane>
