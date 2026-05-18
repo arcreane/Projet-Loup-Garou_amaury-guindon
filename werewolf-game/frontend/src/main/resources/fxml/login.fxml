@@ -9,44 +9,53 @@
            fx:id="rootPane"
            styleClass="root-bg">
 
-    <!-- Lune décorative en haut -->
-    <Region fx:id="moonDeco" styleClass="moon" StackPane.alignment="TOP_CENTER">
-        <StackPane.margin><Insets top="24"/></StackPane.margin>
+    <!-- Image atmosphérique en arrière-plan -->
+    <Region fx:id="bgImage" mouseTransparent="true"/>
+
+    <!-- Overlay sombre pour la lisibilité -->
+    <Region styleClass="bg-overlay" mouseTransparent="true"/>
+
+    <!-- Halo subtil derrière le card -->
+    <Region styleClass="lantern-glow" StackPane.alignment="CENTER" mouseTransparent="true"/>
+
+    <!-- Lune décorative discrète -->
+    <Region fx:id="moonDeco" styleClass="moon" StackPane.alignment="TOP_CENTER" mouseTransparent="true">
+        <StackPane.margin><Insets top="60"/></StackPane.margin>
     </Region>
 
-    <!-- Lueurs douces dans les coins inférieurs (lanternes invisibles, juste la lumière) -->
-    <Region styleClass="lantern-glow" StackPane.alignment="BOTTOM_LEFT">
-        <StackPane.margin><Insets bottom="-80" left="-80"/></StackPane.margin>
-    </Region>
-    <Region styleClass="lantern-glow" StackPane.alignment="BOTTOM_RIGHT">
-        <StackPane.margin><Insets bottom="-80" right="-80"/></StackPane.margin>
-    </Region>
+    <!-- Card central glass -->
+    <VBox alignment="CENTER" spacing="18" maxWidth="440" maxHeight="-Infinity" styleClass="card-glass">
+        <padding><Insets top="44" right="48" bottom="44" left="48"/></padding>
 
-    <!-- Carte parchemin centrée -->
-    <VBox alignment="CENTER" spacing="14" maxWidth="420" maxHeight="-Infinity" styleClass="card">
-        <padding><Insets top="36" right="50" bottom="36" left="50"/></padding>
+        <Label text="LOUP·GAROU" styleClass="brand-title"/>
+        <Label text="Connectez-vous pour rejoindre une partie" styleClass="subtitle"/>
 
-        <Label text="Loup-Garou" styleClass="title-xl"/>
-        <Label text="✦  De Thiercelieux  ✦" styleClass="ornament"/>
-        <Label text="Entrez dans la légende" styleClass="subtitle"/>
+        <Region prefHeight="8"/>
 
-        <Region prefHeight="6"/>
+        <VBox spacing="10">
+            <Label text="PSEUDO" styleClass="muted"/>
+            <TextField fx:id="pseudoField" promptText="Votre pseudo ou pseudo#1234" styleClass="input"/>
+        </VBox>
 
-        <TextField fx:id="pseudoField" promptText="Votre nom..." styleClass="input"/>
-        <TextField fx:id="emailField"  promptText="Adresse (pour l'inscription)" styleClass="input"/>
-        <PasswordField fx:id="passwordField" promptText="Mot de passe secret" styleClass="input"/>
+        <VBox spacing="10">
+            <Label text="EMAIL  (inscription uniquement)" styleClass="muted"/>
+            <TextField fx:id="emailField" promptText="vous@exemple.com" styleClass="input"/>
+        </VBox>
+
+        <VBox spacing="10">
+            <Label text="MOT DE PASSE" styleClass="muted"/>
+            <PasswordField fx:id="passwordField" promptText="••••••••" styleClass="input"/>
+        </VBox>
 
         <HBox spacing="10" alignment="CENTER_LEFT">
-            <Label text="Sceau :" styleClass="muted"/>
-            <ComboBox fx:id="avatarCombo" prefWidth="110" styleClass="dark-combo"/>
+            <Label text="AVATAR" styleClass="muted"/>
+            <ComboBox fx:id="avatarCombo" prefWidth="100" styleClass="dark-combo"/>
         </HBox>
 
         <Region prefHeight="6"/>
 
-        <HBox spacing="10" alignment="CENTER">
-            <Button fx:id="loginBtn"    text="Se connecter" onAction="#onLogin"    styleClass="btn-primary"/>
-            <Button fx:id="registerBtn" text="S'inscrire"   onAction="#onRegister" styleClass="btn-ghost"/>
-        </HBox>
+        <Button fx:id="loginBtn" text="Se connecter" onAction="#onLogin" styleClass="btn-primary" maxWidth="Infinity"/>
+        <Button fx:id="registerBtn" text="Créer un compte" onAction="#onRegister" styleClass="btn-ghost" maxWidth="Infinity"/>
 
         <Label fx:id="errorLabel" styleClass="error"/>
     </VBox>

@@ -1,57 +1,65 @@
 /* =========================================================
-   🌕 LOUP-GAROU - Thème Médiéval Gothique
-   Palette : parchemin, encre brûlée, sang séché, lune d'argent
-   Fonts : Cinzel (titres) + IM Fell English (corps)
+   🌕 LOUP-GAROU - Thème Modern Gaming Premium
+   Style : dark navy + crimson + glass cards
+   Inspirations : Valorant, Discord, Riot Client, Genshin
    ========================================================= */
 
 /* ---------- Palette ---------- */
 * {
-    -palette-parchment:    #e8d8b0;
-    -palette-parchment-2:  #c9b388;
-    -palette-ink:          #2a1810;
-    -palette-ink-2:        #4a2c1c;
-    -palette-blood:        #8b1e1e;
-    -palette-blood-dark:   #5c0f0f;
-    -palette-gold:         #c9a44c;
-    -palette-gold-dark:    #8e6c1c;
-    -palette-moonlight:    #d9e3f0;
-    -palette-night:        #0c0a14;
-    -palette-night-2:      #1a1626;
-    -palette-shadow:       #050308;
+    /* Surfaces */
+    -surface-0:        #0a0a14;   /* fond le plus profond */
+    -surface-1:        #11111d;   /* sidebar, base */
+    -surface-2:        #181826;   /* cards */
+    -surface-3:        #22223a;   /* éléments interactifs au repos */
+    -surface-hover:    #2a2a44;   /* hover */
+    -surface-glass:    rgba(30, 30, 50, 0.65);   /* glass effect */
+
+    /* Bordures */
+    -border-subtle:    rgba(255, 255, 255, 0.06);
+    -border-medium:    rgba(255, 255, 255, 0.12);
+    -border-accent:    rgba(230, 57, 70, 0.45);
+
+    /* Couleurs d'accent */
+    -accent:           #e63946;   /* crimson - couleur principale */
+    -accent-hover:     #f04654;
+    -accent-soft:      rgba(230, 57, 70, 0.18);
+    -accent-glow:      rgba(230, 57, 70, 0.45);
+
+    -gold:             #ffd166;   /* or - ELO / victoires */
+    -gold-soft:        rgba(255, 209, 102, 0.20);
+
+    -wolf:             #8b5cf6;   /* violet - rôle loup */
+    -villager:         #38bdf8;   /* cyan - rôle village */
+    -seer:             #fbbf24;   /* ambre - voyante */
+    -witch:            #ec4899;   /* rose - sorcière */
+    -hunter:           #84cc16;   /* lime - chasseur */
+
+    -success:          #22c55e;
+    -warning:          #f59e0b;
+    -danger:           #ef4444;
+
+    /* Texte */
+    -text-primary:     #f1f5f9;
+    -text-secondary:   #cbd5e1;
+    -text-muted:       #64748b;
+    -text-faint:       #475569;
 }
 
 .root {
-    -fx-font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+    -fx-font-family: "Inter", "Segoe UI Variable Display", "Segoe UI", "SF Pro Display", system-ui, sans-serif;
     -fx-font-size: 13px;
-    -fx-text-fill: -palette-parchment;
-    -fx-base: -palette-ink;
-    -fx-background-color: transparent;
+    -fx-font-smoothing-type: lcd;
+    -fx-text-fill: -text-primary;
+    -fx-base: -surface-1;
+    -fx-background-color: -surface-0;
 }
 
-/* ---------- Fond global : nuit étoilée par défaut ---------- */
+/* ---------- Fonds : image atmosphérique + overlay sombre pour lisibilité ---------- */
 .root-bg {
     -fx-background-color:
-        radial-gradient(center 30% 25%, radius 60%, rgba(217,227,240,0.12), transparent),
-        radial-gradient(center 70% 80%, radius 70%, rgba(139,30,30,0.15), transparent),
-        linear-gradient(to bottom, #0a0815 0%, #15101f 40%, #1d1322 70%, #0a0610 100%);
+        linear-gradient(to bottom right, #0a0a14 0%, #11111d 50%, #0a0a14 100%);
 }
 
-/* Variante "jour" - sépia parchemin */
-.root-bg-day {
-    -fx-background-color:
-        radial-gradient(center 50% 30%, radius 70%, rgba(255,200,120,0.25), transparent),
-        linear-gradient(to bottom, #2a1a10 0%, #4a2a18 50%, #2a1810 100%);
-}
-
-/* Variante "parchemin" (login, lobby) */
-.root-bg-parchment {
-    -fx-background-color:
-        radial-gradient(center 50% 0%, radius 90%, rgba(200,150,80,0.18), transparent),
-        radial-gradient(center 50% 100%, radius 90%, rgba(40,20,10,0.5), transparent),
-        linear-gradient(to bottom, #1a1208 0%, #2a1810 50%, #0f0805 100%);
-}
-
-/* ---------- Fonds d'écran via CSS (couverture totale fiable) ---------- */
 .bg-night {
     -fx-background-image: url("../images/backgrounds/night.jpg");
     -fx-background-size: cover;
@@ -83,442 +91,440 @@
     -fx-background-repeat: no-repeat;
 }
 
-/* ---------- Cartes parchemin ---------- */
-.card {
+/* Overlay sombre par-dessus l'image (StackPane.children, fx:id=bgOverlay) */
+.bg-overlay {
     -fx-background-color:
-        linear-gradient(to bottom right, rgba(232,216,176,0.99), rgba(201,179,136,0.98));
-    -fx-background-radius: 6;
-    -fx-border-color: -palette-ink-2;
-    -fx-border-width: 2;
-    -fx-border-radius: 6;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 20, 0.3, 0, 6);
-    -fx-padding: 4;
-}
-.card .label, .card Label {
-    -fx-text-fill: -palette-ink;
+        linear-gradient(to bottom, rgba(10,10,20,0.78) 0%, rgba(10,10,20,0.88) 100%);
 }
 
-/* Carte sombre (utilisée en jeu pour les panels) - quasi-opaque */
-.card-dark {
-    -fx-background-color:
-        linear-gradient(to bottom, rgba(20,15,30,0.97), rgba(10,8,18,0.99));
-    -fx-background-radius: 6;
-    -fx-border-color: -palette-gold-dark;
-    -fx-border-width: 2;
-    -fx-border-radius: 6;
-    -fx-effect: dropshadow(gaussian, rgba(201,164,76,0.25), 18, 0.25, 0, 4);
-}
-.card-dark .label, .card-dark Label {
-    -fx-text-fill: -palette-parchment;
-}
-
-/* ---------- Topbar - bandeau de bois ---------- */
+/* ---------- TOPBAR moderne ---------- */
 .topbar {
-    -fx-background-color:
-        linear-gradient(to bottom, #3a2418 0%, #2a1810 50%, #1a0e08 100%);
-    -fx-border-color: transparent transparent -palette-gold-dark transparent;
-    -fx-border-width: 0 0 3 0;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 12, 0.2, 0, 4);
+    -fx-background-color: rgba(17, 17, 29, 0.92);
+    -fx-border-color: transparent transparent -border-subtle transparent;
+    -fx-border-width: 0 0 1 0;
 }
-.topbar .label { -fx-text-fill: -palette-parchment; }
+.topbar .label { -fx-text-fill: -text-primary; }
 
 /* ---------- Typographie ---------- */
 .title-xl {
-    -fx-font-family: "Cinzel", "Trajan Pro", "Georgia", serif;
-    -fx-font-size: 42px;
-    -fx-font-weight: bold;
-    -fx-text-fill: -palette-gold;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.9), 8, 0.5, 2, 3);
+    -fx-font-family: "Inter", "Segoe UI Variable Display", system-ui, sans-serif;
+    -fx-font-size: 44px;
+    -fx-font-weight: 900;
+    -fx-text-fill: -text-primary;
+    -fx-letter-spacing: -0.5px;
 }
 .title-l {
-    -fx-font-family: "Cinzel", "Trajan Pro", "Georgia", serif;
-    -fx-font-size: 24px;
-    -fx-font-weight: bold;
-    -fx-text-fill: -palette-gold;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 4, 0.3, 1, 2);
+    -fx-font-family: "Inter", "Segoe UI Variable Display", system-ui, sans-serif;
+    -fx-font-size: 22px;
+    -fx-font-weight: 800;
+    -fx-text-fill: -text-primary;
+    -fx-letter-spacing: -0.3px;
 }
 .title-m {
-    -fx-font-family: "Cinzel", "Trajan Pro", "Georgia", serif;
-    -fx-font-size: 16px;
-    -fx-font-weight: bold;
-    -fx-text-fill: -palette-blood;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 2, 0.2, 0, 1);
+    -fx-font-family: "Inter", "Segoe UI Variable Display", system-ui, sans-serif;
+    -fx-font-size: 15px;
+    -fx-font-weight: 700;
+    -fx-text-fill: -text-primary;
+    -fx-letter-spacing: 0.2px;
 }
-.card-dark .title-m { -fx-text-fill: -palette-gold; }
-
 .subtitle {
-    -fx-font-family: "IM Fell English", "Georgia", serif;
-    -fx-text-fill: -palette-ink-2;
-    -fx-font-style: italic;
-    -fx-font-size: 14px;
-}
-.card-dark .subtitle { -fx-text-fill: -palette-parchment-2; }
-
-.muted {
-    -fx-text-fill: -palette-ink-2;
-    -fx-font-size: 12px;
-    -fx-font-family: "IM Fell English", "Georgia", serif;
-}
-.card-dark .muted { -fx-text-fill: derive(-palette-parchment, -25%); }
-.topbar .muted   { -fx-text-fill: -palette-parchment-2; }
-
-.error {
-    -fx-text-fill: -palette-blood;
+    -fx-text-fill: -text-secondary;
     -fx-font-size: 13px;
-    -fx-font-weight: bold;
-    -fx-font-family: "IM Fell English", "Georgia", serif;
+    -fx-font-weight: 500;
+}
+.muted {
+    -fx-text-fill: -text-muted;
+    -fx-font-size: 12px;
+    -fx-font-weight: 500;
+}
+.error {
+    -fx-text-fill: -accent;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
 }
 
-/* ---------- Badges (rôle, classée, etc.) ---------- */
-.badge {
-    -fx-background-color: linear-gradient(to bottom, -palette-blood, -palette-blood-dark);
-    -fx-text-fill: -palette-parchment;
-    -fx-padding: 5 14 5 14;
-    -fx-background-radius: 3;
-    -fx-border-color: -palette-gold-dark;
+/* Brand title (pour "Loup-Garou" en gros sur le login) */
+.brand-title {
+    -fx-font-family: "Inter", "Segoe UI Variable Display", system-ui, sans-serif;
+    -fx-font-size: 48px;
+    -fx-font-weight: 900;
+    -fx-text-fill: -text-primary;
+    -fx-letter-spacing: -1.5px;
+}
+.brand-accent {
+    -fx-text-fill: -accent;
+}
+
+/* ---------- Cards (glass effect) ---------- */
+.card {
+    -fx-background-color: -surface-2;
+    -fx-background-radius: 16;
+    -fx-border-color: -border-subtle;
+    -fx-border-radius: 16;
     -fx-border-width: 1;
-    -fx-border-radius: 3;
-    -fx-font-family: "Cinzel", "Georgia", serif;
-    -fx-font-size: 11px;
-    -fx-font-weight: bold;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 4, 0.3, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.55), 30, 0.18, 0, 8);
+}
+.card .label, .card Label {
+    -fx-text-fill: -text-primary;
+}
+
+.card-glass {
+    -fx-background-color: -surface-glass;
+    -fx-background-radius: 16;
+    -fx-border-color: -border-medium;
+    -fx-border-radius: 16;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 32, 0.2, 0, 10);
+}
+.card-glass .label, .card-glass Label {
+    -fx-text-fill: -text-primary;
+}
+
+/* Carte interactive (hover) */
+.card-interactive {
+    -fx-cursor: hand;
+}
+.card-interactive:hover {
+    -fx-border-color: -border-accent;
+    -fx-effect: dropshadow(gaussian, -accent-glow, 24, 0.25, 0, 6);
+}
+
+/* ---------- Badges ---------- */
+.badge {
+    -fx-background-color: -surface-3;
+    -fx-text-fill: -text-primary;
+    -fx-padding: 6 14 6 14;
+    -fx-background-radius: 999;
+    -fx-border-color: -border-subtle;
+    -fx-border-radius: 999;
+    -fx-border-width: 1;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+}
+.badge-accent {
+    -fx-background-color: -accent-soft;
+    -fx-text-fill: -accent;
+    -fx-border-color: -border-accent;
+}
+.badge-gold {
+    -fx-background-color: -gold-soft;
+    -fx-text-fill: -gold;
+    -fx-border-color: rgba(255, 209, 102, 0.35);
 }
 .badge-ranked {
-    -fx-background-color: linear-gradient(to bottom, -palette-gold, -palette-gold-dark);
-    -fx-text-fill: -palette-ink;
+    -fx-background-color: -gold-soft;
+    -fx-text-fill: -gold;
+    -fx-border-color: rgba(255, 209, 102, 0.35);
 }
 .badge-casual {
-    -fx-background-color: linear-gradient(to bottom, #4a4358, #2a2238);
+    -fx-background-color: -surface-3;
+    -fx-text-fill: -text-secondary;
 }
+.badge-success { -fx-background-color: rgba(34,197,94,0.18); -fx-text-fill: -success; }
+.badge-warning { -fx-background-color: rgba(245,158,11,0.18); -fx-text-fill: -warning; }
+.badge-danger  { -fx-background-color: rgba(239,68,68,0.18);  -fx-text-fill: -danger; }
 
-/* ---------- Inputs ---------- */
+/* ---------- Inputs (modern field) ---------- */
 .input, .text-field, .password-field {
-    -fx-background-color: rgba(255,245,220,0.85);
-    -fx-text-fill: -palette-ink;
-    -fx-prompt-text-fill: derive(-palette-ink, 60%);
-    -fx-background-radius: 3;
-    -fx-border-color: -palette-ink-2;
-    -fx-border-width: 1.5;
-    -fx-border-radius: 3;
-    -fx-padding: 9 12 9 12;
-    -fx-font-family: "IM Fell English", "Georgia", serif;
+    -fx-background-color: -surface-3;
+    -fx-text-fill: -text-primary;
+    -fx-prompt-text-fill: -text-muted;
+    -fx-background-radius: 12;
+    -fx-border-color: -border-subtle;
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-padding: 12 16 12 16;
     -fx-font-size: 14px;
+    -fx-font-weight: 500;
 }
 .input:focused, .text-field:focused, .password-field:focused {
-    -fx-border-color: -palette-blood;
-    -fx-effect: dropshadow(gaussian, rgba(139,30,30,0.5), 5, 0.4, 0, 0);
+    -fx-border-color: -accent;
+    -fx-effect: dropshadow(gaussian, -accent-glow, 12, 0.4, 0, 0);
 }
 
-/* ---------- Boutons ---------- */
+/* ---------- Boutons modernes ---------- */
 .btn-primary {
-    -fx-background-color: linear-gradient(to bottom, -palette-blood, -palette-blood-dark);
-    -fx-text-fill: -palette-parchment;
-    -fx-font-family: "Cinzel", "Georgia", serif;
-    -fx-font-weight: bold;
-    -fx-padding: 10 22 10 22;
-    -fx-background-radius: 3;
-    -fx-border-color: -palette-gold-dark;
-    -fx-border-width: 1.5;
-    -fx-border-radius: 3;
+    -fx-background-color: linear-gradient(to bottom, -accent-hover, -accent);
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+    -fx-font-size: 13px;
+    -fx-padding: 12 24 12 24;
+    -fx-background-radius: 12;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.55), 6, 0.3, 0, 3);
+    -fx-effect: dropshadow(gaussian, rgba(230, 57, 70, 0.35), 12, 0.3, 0, 4);
 }
 .btn-primary:hover {
-    -fx-background-color: linear-gradient(to bottom, derive(-palette-blood, 10%), -palette-blood);
-    -fx-border-color: -palette-gold;
+    -fx-background-color: linear-gradient(to bottom, #ff5060, -accent-hover);
+    -fx-effect: dropshadow(gaussian, -accent-glow, 18, 0.5, 0, 6);
 }
 .btn-primary:pressed { -fx-translate-y: 1; }
-.btn-primary:disabled { -fx-opacity: 0.45; }
+.btn-primary:disabled { -fx-opacity: 0.4; }
 
 .btn-ghost {
     -fx-background-color: transparent;
-    -fx-text-fill: -palette-gold;
-    -fx-font-family: "Cinzel", "Georgia", serif;
-    -fx-font-weight: bold;
-    -fx-border-color: -palette-gold-dark;
-    -fx-border-width: 1.5;
-    -fx-border-radius: 3;
-    -fx-background-radius: 3;
-    -fx-padding: 10 22 10 22;
+    -fx-text-fill: -text-secondary;
+    -fx-font-weight: 600;
+    -fx-font-size: 13px;
+    -fx-border-color: -border-medium;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-border-width: 1;
+    -fx-padding: 12 22 12 22;
     -fx-cursor: hand;
 }
 .btn-ghost:hover {
-    -fx-background-color: rgba(201,164,76,0.18);
-    -fx-border-color: -palette-gold;
+    -fx-background-color: -surface-hover;
+    -fx-text-fill: -text-primary;
+    -fx-border-color: -accent;
 }
 
 .btn-danger {
-    -fx-background-color: linear-gradient(to bottom, #5c0f0f, #2c0707);
-    -fx-text-fill: -palette-parchment;
-    -fx-font-family: "Cinzel", "Georgia", serif;
-    -fx-font-weight: bold;
-    -fx-padding: 10 22 10 22;
-    -fx-background-radius: 3;
-    -fx-border-color: -palette-blood;
-    -fx-border-width: 1.5;
-    -fx-border-radius: 3;
+    -fx-background-color: linear-gradient(to bottom, -danger, #b91c1c);
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+    -fx-padding: 12 24 12 24;
+    -fx-background-radius: 12;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(139,30,30,0.6), 8, 0.4, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(239, 68, 68, 0.4), 12, 0.3, 0, 4);
 }
-.btn-danger:hover { -fx-background-color: linear-gradient(to bottom, -palette-blood, -palette-blood-dark); }
+.btn-danger:hover {
+    -fx-background-color: linear-gradient(to bottom, #f43f5e, -danger);
+}
+
+.btn-icon {
+    -fx-background-color: -surface-3;
+    -fx-text-fill: -text-primary;
+    -fx-padding: 10 14 10 14;
+    -fx-background-radius: 10;
+    -fx-border-color: -border-subtle;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+    -fx-font-weight: 600;
+}
+.btn-icon:hover {
+    -fx-background-color: -surface-hover;
+    -fx-border-color: -border-medium;
+}
 
 /* ---------- Listes ---------- */
 .dark-list {
-    -fx-background-color: rgba(20,15,12,0.95);
-    -fx-control-inner-background: rgba(20,15,12,0.95);
-    -fx-background-radius: 3;
-    -fx-border-color: -palette-gold-dark;
+    -fx-background-color: -surface-2;
+    -fx-control-inner-background: -surface-2;
+    -fx-background-radius: 12;
+    -fx-border-color: -border-subtle;
     -fx-border-width: 1;
-    -fx-border-radius: 3;
+    -fx-border-radius: 12;
+    -fx-padding: 4;
 }
 .dark-list .list-cell {
     -fx-background-color: transparent;
-    -fx-text-fill: -palette-parchment;
-    -fx-padding: 9 14 9 14;
-    -fx-border-color: transparent transparent rgba(201,164,76,0.15) transparent;
-    -fx-font-family: "IM Fell English", "Georgia", serif;
+    -fx-text-fill: -text-primary;
+    -fx-padding: 11 14 11 14;
+    -fx-background-radius: 8;
     -fx-font-size: 14px;
+    -fx-font-weight: 500;
 }
 .dark-list .list-cell:filled:selected {
-    -fx-background-color: linear-gradient(to right, -palette-blood-dark, -palette-blood);
-    -fx-text-fill: -palette-parchment;
+    -fx-background-color: -accent;
+    -fx-text-fill: white;
 }
 .dark-list .list-cell:filled:hover {
-    -fx-background-color: rgba(201,164,76,0.22);
-}
-
-/* Variante parchemin (listes dans une carte parchemin claire) */
-.card .dark-list {
-    -fx-background-color: rgba(60,40,25,0.92);
-    -fx-control-inner-background: rgba(60,40,25,0.92);
-}
-.card .dark-list .list-cell {
-    -fx-background-color: transparent;
-    -fx-text-fill: -palette-parchment;
-}
-.card .dark-list .list-cell:filled:selected {
-    -fx-background-color: linear-gradient(to right, -palette-blood, -palette-blood-dark);
-    -fx-text-fill: -palette-parchment;
-}
-.card .dark-list .list-cell:filled:hover {
-    -fx-background-color: rgba(201,164,76,0.25);
+    -fx-background-color: -surface-hover;
 }
 
 .dark-list.logs .list-cell {
-    -fx-font-family: "IM Fell English", "Georgia", serif;
+    -fx-text-fill: -text-secondary;
     -fx-font-size: 13px;
-    -fx-text-fill: derive(-palette-parchment, -15%);
+    -fx-padding: 8 14 8 14;
 }
 
 /* ---------- TreeView ---------- */
 .dark-tree {
-    -fx-background-color: rgba(40,28,20,0.7);
-    -fx-control-inner-background: rgba(40,28,20,0.7);
-    -fx-background-radius: 3;
-    -fx-border-color: -palette-gold-dark;
+    -fx-background-color: -surface-2;
+    -fx-control-inner-background: -surface-2;
+    -fx-background-radius: 12;
+    -fx-border-color: -border-subtle;
     -fx-border-width: 1;
-    -fx-border-radius: 3;
+    -fx-border-radius: 12;
+    -fx-padding: 4;
 }
 .dark-tree .tree-cell {
-    -fx-text-fill: -palette-parchment;
-    -fx-padding: 6 10 6 10;
+    -fx-text-fill: -text-primary;
+    -fx-padding: 7 10 7 10;
     -fx-background-color: transparent;
-    -fx-font-family: "IM Fell English", "Georgia", serif;
+    -fx-background-radius: 6;
     -fx-font-size: 13px;
+    -fx-font-weight: 500;
 }
 .dark-tree .tree-cell:filled:hover {
-    -fx-background-color: rgba(201,164,76,0.18);
+    -fx-background-color: -surface-hover;
 }
 .dark-tree .tree-cell:filled:selected {
-    -fx-background-color: rgba(139,30,30,0.5);
-    -fx-text-fill: -palette-parchment;
+    -fx-background-color: -accent-soft;
+    -fx-text-fill: -text-primary;
 }
 
 /* ---------- ComboBox ---------- */
 .dark-combo {
-    -fx-background-color: rgba(255,245,220,0.85);
-    -fx-text-fill: -palette-ink;
-    -fx-background-radius: 3;
-    -fx-border-color: -palette-ink-2;
-    -fx-border-width: 1.5;
-    -fx-border-radius: 3;
+    -fx-background-color: -surface-3;
+    -fx-text-fill: -text-primary;
+    -fx-background-radius: 12;
+    -fx-border-color: -border-subtle;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-padding: 4 8 4 8;
 }
 .dark-combo .list-cell {
-    -fx-text-fill: -palette-ink;
+    -fx-text-fill: -text-primary;
     -fx-background-color: transparent;
-    -fx-padding: 6 10 6 10;
-    -fx-font-family: "IM Fell English", "Georgia", serif;
+    -fx-padding: 8 10 8 10;
+    -fx-font-size: 14px;
 }
-.dark-combo .arrow { -fx-background-color: -palette-ink; }
-.dark-combo-popup .list-view { -fx-background-color: -palette-parchment-2; }
+.dark-combo .arrow { -fx-background-color: -text-secondary; }
+.dark-combo:hover { -fx-border-color: -border-medium; }
+.dark-combo:focused { -fx-border-color: -accent; }
+.dark-combo-popup .list-view {
+    -fx-background-color: -surface-2;
+    -fx-background-radius: 12;
+    -fx-border-color: -border-medium;
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-padding: 4;
+}
+.dark-combo-popup .list-view .list-cell:filled:hover {
+    -fx-background-color: -surface-hover;
+}
 
-/* ---------- ProgressBar (sablier de la phase) ---------- */
+/* ---------- ProgressBar (timer) ---------- */
 .phase-timer .bar {
-    -fx-background-color: linear-gradient(to right, -palette-blood, -palette-gold, -palette-moonlight);
-    -fx-background-radius: 2;
-    -fx-effect: dropshadow(gaussian, rgba(201,164,76,0.5), 6, 0.4, 0, 0);
+    -fx-background-color: linear-gradient(to right, -accent, #ff8a5b);
+    -fx-background-radius: 999;
+    -fx-effect: dropshadow(gaussian, -accent-glow, 8, 0.5, 0, 0);
 }
 .phase-timer .track {
-    -fx-background-color: rgba(0,0,0,0.7);
-    -fx-background-radius: 2;
-    -fx-border-color: -palette-gold-dark;
-    -fx-border-width: 1;
-    -fx-border-radius: 2;
+    -fx-background-color: -surface-3;
+    -fx-background-radius: 999;
 }
-.phase-timer { -fx-pref-height: 10; }
+.phase-timer { -fx-pref-height: 6; }
 
 /* ---------- ScrollBar ---------- */
 .scroll-bar:vertical, .scroll-bar:horizontal {
     -fx-background-color: transparent;
+    -fx-padding: 2;
 }
 .scroll-bar .thumb {
-    -fx-background-color: -palette-gold-dark;
-    -fx-background-radius: 4;
+    -fx-background-color: -surface-hover;
+    -fx-background-radius: 999;
 }
-.scroll-bar .thumb:hover { -fx-background-color: -palette-gold; }
+.scroll-bar .thumb:hover { -fx-background-color: -text-muted; }
+.scroll-bar .increment-button, .scroll-bar .decrement-button,
+.scroll-bar .increment-arrow, .scroll-bar .decrement-arrow {
+    -fx-padding: 0;
+    -fx-shape: " ";
+}
 
 /* ---------- CheckBox ---------- */
 .check-box {
-    -fx-text-fill: -palette-ink;
-    -fx-font-family: "IM Fell English", "Georgia", serif;
+    -fx-text-fill: -text-primary;
     -fx-font-size: 13px;
+    -fx-font-weight: 500;
 }
-.card-dark .check-box { -fx-text-fill: -palette-parchment; }
 .check-box .box {
-    -fx-background-color: rgba(255,245,220,0.85);
-    -fx-border-color: -palette-ink-2;
-    -fx-border-radius: 2;
-    -fx-background-radius: 2;
-}
-.check-box:selected .mark {
-    -fx-background-color: -palette-blood;
-}
-
-/* ---------- Action panel (encadré rouge sang) ---------- */
-.action-panel {
-    -fx-border-color: -palette-blood;
-    -fx-border-width: 2;
-    -fx-effect: dropshadow(gaussian, rgba(139,30,30,0.4), 14, 0.3, 0, 4);
-}
-
-/* ---------- Chat panel (boisé) ---------- */
-.chat-panel {
-    -fx-border-color: -palette-gold-dark;
-    -fx-border-width: 2;
-}
-
-/* ---------- Carte de joueur (style carte à jouer) ---------- */
-.player-card {
-    -fx-background-color:
-        linear-gradient(to bottom, rgba(232,216,176,0.95), rgba(180,150,100,0.95));
-    -fx-background-radius: 6;
-    -fx-border-color: -palette-ink-2;
-    -fx-border-width: 2;
+    -fx-background-color: -surface-3;
+    -fx-border-color: -border-medium;
     -fx-border-radius: 6;
-    -fx-padding: 8;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 8, 0.3, 0, 3);
+    -fx-background-radius: 6;
+    -fx-padding: 3;
 }
-.player-card-dead {
-    -fx-opacity: 0.45;
-    -fx-background-color:
-        linear-gradient(to bottom, rgba(120,100,80,0.7), rgba(60,40,30,0.7));
+.check-box:selected .box {
+    -fx-background-color: -accent;
+    -fx-border-color: -accent;
 }
-.player-card-me {
-    -fx-border-color: -palette-gold;
-    -fx-border-width: 3;
-    -fx-effect: dropshadow(gaussian, rgba(201,164,76,0.6), 12, 0.5, 0, 0);
+.check-box:selected .mark { -fx-background-color: white; }
+.check-box:hover .box { -fx-border-color: -accent; }
+
+/* ---------- Action panel (le panneau de droite en jeu) ---------- */
+.action-panel {
+    -fx-border-color: -border-accent;
+    -fx-effect: dropshadow(gaussian, -accent-glow, 18, 0.18, 0, 4);
 }
 
-/* ---------- Dialogues (Alert, ChoiceDialog) ---------- */
-.dialog-pane {
-    -fx-background-color: -palette-parchment;
-}
-.dialog-pane .header-panel {
-    -fx-background-color:
-        linear-gradient(to bottom, -palette-ink-2, -palette-ink);
-}
-.dialog-pane .header-panel .label {
-    -fx-text-fill: -palette-gold;
-    -fx-font-family: "Cinzel", "Georgia", serif;
-    -fx-font-size: 18px;
-    -fx-font-weight: bold;
-}
-.dialog-pane .content .label {
-    -fx-text-fill: -palette-ink;
-    -fx-font-family: "IM Fell English", "Georgia", serif;
-    -fx-font-size: 14px;
-}
-.dialog-pane .button {
-    -fx-background-color: linear-gradient(to bottom, -palette-blood, -palette-blood-dark);
-    -fx-text-fill: -palette-parchment;
-    -fx-font-family: "Cinzel", "Georgia", serif;
-    -fx-font-weight: bold;
-    -fx-background-radius: 3;
-    -fx-padding: 8 18 8 18;
-    -fx-border-color: -palette-gold-dark;
-    -fx-border-width: 1;
+.chat-panel {
+    -fx-border-color: rgba(56, 189, 248, 0.25);
 }
 
-/* ---------- Lune décorative (image PNG transparente) ---------- */
+/* ---------- Lune décorative ---------- */
 .moon {
     -fx-background-image: url("../images/ui/moon.png");
     -fx-background-repeat: no-repeat;
     -fx-background-size: contain;
     -fx-background-position: center;
-    -fx-effect: dropshadow(gaussian, rgba(255,250,224,0.85), 40, 0.7, 0, 0);
-    -fx-pref-width: 160;
-    -fx-pref-height: 160;
-    -fx-min-width: 160;
-    -fx-min-height: 160;
+    -fx-effect: dropshadow(gaussian, rgba(255, 250, 224, 0.7), 50, 0.55, 0, 0);
+    -fx-pref-width: 140;
+    -fx-pref-height: 140;
+    -fx-min-width: 140;
+    -fx-min-height: 140;
 }
 .sun {
     -fx-background-image: url("../images/ui/sun.png");
     -fx-background-repeat: no-repeat;
     -fx-background-size: contain;
     -fx-background-position: center;
-    -fx-effect: dropshadow(gaussian, rgba(255,180,80,0.85), 50, 0.7, 0, 0);
-    -fx-pref-width: 180;
-    -fx-pref-height: 180;
-    -fx-min-width: 180;
-    -fx-min-height: 180;
+    -fx-effect: dropshadow(gaussian, rgba(255, 180, 80, 0.85), 60, 0.65, 0, 0);
+    -fx-pref-width: 160;
+    -fx-pref-height: 160;
+    -fx-min-width: 160;
+    -fx-min-height: 160;
 }
 
-/* ---------- Lanterne décorative ---------- */
-.lantern {
-    -fx-background-image: url("../images/ui/lantern.png");
-    -fx-background-repeat: no-repeat;
-    -fx-background-size: contain;
-    -fx-background-position: center;
-    -fx-pref-width: 140;
-    -fx-pref-height: 200;
-    -fx-min-width: 140;
-    -fx-min-height: 200;
-    -fx-effect: dropshadow(gaussian, rgba(255,180,80,0.6), 30, 0.4, 0, 0);
-}
+/* Halo de lanterne (vestige du thème précédent, désactivé visuellement) */
 .lantern-glow {
     -fx-background-color: radial-gradient(center 50% 50%, radius 50%,
-        rgba(255,180,80,0.45) 0%, rgba(255,140,60,0.2) 30%, transparent 100%);
-    -fx-pref-width: 320;
-    -fx-pref-height: 320;
+        rgba(230, 57, 70, 0.18) 0%, transparent 100%);
+    -fx-pref-width: 280;
+    -fx-pref-height: 280;
 }
 
-/* ---------- Parchemin (sur image scroll.png) ---------- */
-.scroll-decor {
-    -fx-background-image: url("../images/ui/scroll.png");
-    -fx-background-repeat: no-repeat;
-    -fx-background-size: contain;
-    -fx-background-position: center;
-    -fx-pref-width: 600;
-    -fx-pref-height: 400;
+/* ---------- TabPane moderne ---------- */
+.tab-pane {
+    -fx-tab-min-height: 36;
+    -fx-tab-max-height: 36;
+}
+.tab-pane > .tab-header-area { -fx-padding: 0; }
+.tab-pane > .tab-header-area > .tab-header-background {
+    -fx-background-color: transparent;
+}
+.tab-pane > .tab-header-area > .headers-region > .tab {
+    -fx-background-color: transparent;
+    -fx-padding: 8 18 8 18;
+    -fx-background-radius: 0;
+    -fx-border-color: transparent transparent -border-subtle transparent;
+    -fx-border-width: 0 0 2 0;
+}
+.tab-pane > .tab-header-area > .headers-region > .tab:selected {
+    -fx-border-color: transparent transparent -accent transparent;
+}
+.tab-pane > .tab-header-area > .headers-region > .tab:hover {
+    -fx-background-color: -surface-2;
+}
+.tab-pane > .tab-header-area > .headers-region > .tab .tab-label {
+    -fx-text-fill: -text-muted;
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+}
+.tab-pane > .tab-header-area > .headers-region > .tab:selected .tab-label {
+    -fx-text-fill: -text-primary;
+}
+.tab-pane > .tab-content-area { -fx-background-color: transparent; }
+
+/* ---------- Separator ---------- */
+.separator .line {
+    -fx-border-color: -border-subtle transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
 }
 
-/* ---------- Séparateur orné ---------- */
-.ornament {
-    -fx-text-fill: -palette-gold-dark;
-    -fx-font-size: 18px;
-}
-
-/* ---------- ScrollPane transparent (pour pages scrollables) ---------- */
+/* ---------- ScrollPane transparent ---------- */
 .transparent-scroll,
 .transparent-scroll > .viewport,
 .transparent-scroll > .corner {
@@ -529,50 +535,63 @@
     -fx-background-insets: 0;
 }
 
-/* ---------- TabPane (onglets style médiéval) ---------- */
-.tab-pane {
-    -fx-tab-min-height: 32;
-    -fx-tab-max-height: 32;
+/* ---------- Dialogs (Alert, ChoiceDialog) ---------- */
+.dialog-pane {
+    -fx-background-color: -surface-2;
+    -fx-border-color: -border-medium;
+    -fx-border-radius: 16;
+    -fx-background-radius: 16;
 }
-.tab-pane > .tab-header-area {
-    -fx-padding: 0;
+.dialog-pane .header-panel {
+    -fx-background-color: linear-gradient(to bottom, -surface-3, -surface-2);
+    -fx-background-radius: 16 16 0 0;
 }
-.tab-pane > .tab-header-area > .tab-header-background {
-    -fx-background-color: transparent;
+.dialog-pane .header-panel .label {
+    -fx-text-fill: -text-primary;
+    -fx-font-size: 18px;
+    -fx-font-weight: 800;
 }
-.tab-pane > .tab-header-area > .headers-region > .tab {
-    -fx-background-color: linear-gradient(to bottom, rgba(40,28,20,0.85), rgba(20,15,10,0.92));
-    -fx-background-radius: 4 4 0 0;
-    -fx-border-color: -palette-gold-dark;
-    -fx-border-width: 1 1 0 1;
-    -fx-border-radius: 4 4 0 0;
-    -fx-padding: 5 14 5 14;
+.dialog-pane .content .label {
+    -fx-text-fill: -text-secondary;
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
 }
-.tab-pane > .tab-header-area > .headers-region > .tab:selected {
-    -fx-background-color: linear-gradient(to bottom, -palette-blood, -palette-blood-dark);
-    -fx-border-color: -palette-gold;
-}
-.tab-pane > .tab-header-area > .headers-region > .tab:hover {
-    -fx-background-color: linear-gradient(to bottom, rgba(80,50,30,0.92), rgba(40,28,20,0.95));
-}
-.tab-pane > .tab-header-area > .headers-region > .tab .tab-label {
-    -fx-text-fill: -palette-parchment;
-    -fx-font-family: "Cinzel", "Georgia", serif;
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
-}
-.tab-pane > .tab-header-area > .headers-region > .tab:selected .tab-label {
-    -fx-text-fill: -palette-parchment;
-}
-.tab-pane > .tab-header-area > .headers-region > .tab .focus-indicator {
-    -fx-border-color: transparent;
-}
-.tab-pane > .tab-content-area {
-    -fx-background-color: transparent;
+.dialog-pane .button {
+    -fx-background-color: linear-gradient(to bottom, -accent-hover, -accent);
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+    -fx-background-radius: 10;
+    -fx-padding: 9 18 9 18;
 }
 
-/* ---------- Separator (entre sections) ---------- */
-.separator .line {
-    -fx-border-color: -palette-gold-dark transparent transparent transparent;
-    -fx-border-width: 1 0 0 0;
+/* ---------- Avatar (sera utilisé dans la liste d'amis et joueurs) ---------- */
+.avatar-bubble {
+    -fx-background-color: -surface-3;
+    -fx-background-radius: 999;
+    -fx-border-color: -border-medium;
+    -fx-border-radius: 999;
+    -fx-border-width: 2;
+    -fx-min-width: 44;
+    -fx-min-height: 44;
+    -fx-max-width: 44;
+    -fx-max-height: 44;
+    -fx-pref-width: 44;
+    -fx-pref-height: 44;
+    -fx-alignment: center;
+    -fx-font-size: 20px;
 }
+.avatar-bubble-online  { -fx-border-color: -success; }
+.avatar-bubble-game    { -fx-border-color: -accent; }
+.avatar-bubble-offline { -fx-border-color: -text-faint; }
+
+/* ---------- Indicateur de statut (pastille) ---------- */
+.status-dot {
+    -fx-min-width: 10;
+    -fx-min-height: 10;
+    -fx-max-width: 10;
+    -fx-max-height: 10;
+    -fx-background-radius: 999;
+}
+.status-online  { -fx-background-color: -success; -fx-effect: dropshadow(gaussian, rgba(34,197,94,0.6), 6, 0.4, 0, 0); }
+.status-game    { -fx-background-color: -accent; }
+.status-offline { -fx-background-color: -text-faint; }

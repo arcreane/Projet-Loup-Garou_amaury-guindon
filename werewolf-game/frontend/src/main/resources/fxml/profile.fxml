@@ -3,107 +3,118 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.werewolf.controller.ProfileController"
-            fx:id="rootPane"
-            styleClass="root-bg">
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.werewolf.controller.ProfileController"
+           fx:id="rootPane"
+           styleClass="root-bg">
 
-    <top>
-        <HBox alignment="CENTER_LEFT" spacing="14" styleClass="topbar">
-            <padding><Insets top="18" right="24" bottom="18" left="24"/></padding>
-            <Label text="✦ Votre Sceau" styleClass="title-l"/>
-            <Label text="•" styleClass="ornament"/>
-            <Label text="Profil et Compagnons" styleClass="subtitle"/>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Label fx:id="myTagLabel" styleClass="badge"/>
-            <Button text="← Retour" onAction="#onBack" styleClass="btn-ghost"/>
-        </HBox>
-    </top>
+    <Region fx:id="bgImage" mouseTransparent="true"/>
+    <Region styleClass="bg-overlay" mouseTransparent="true"/>
 
-    <center>
-        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="transparent-scroll">
-        <HBox spacing="20">
-            <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+    <BorderPane>
+        <top>
+            <HBox alignment="CENTER_LEFT" spacing="14" styleClass="topbar">
+                <padding><Insets top="18" right="28" bottom="18" left="28"/></padding>
+                <VBox>
+                    <Label text="Profil" styleClass="title-l"/>
+                    <Label text="Compte et compagnons" styleClass="muted"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="myTagLabel" styleClass="badge badge-accent"/>
+                <Button text="← Retour" onAction="#onBack" styleClass="btn-ghost"/>
+            </HBox>
+        </top>
 
-            <!-- ============ PROFIL ============ -->
-            <VBox spacing="14" prefWidth="360" maxHeight="-Infinity" alignment="TOP_LEFT" styleClass="card">
-                <padding><Insets top="22" right="22" bottom="22" left="22"/></padding>
-                <Label text="✦ Modifier le profil" styleClass="title-m"/>
+        <center>
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="transparent-scroll">
+                <HBox spacing="24">
+                    <padding><Insets top="28" right="28" bottom="28" left="28"/></padding>
 
-                <Label text="Sceau (avatar) :" styleClass="muted"/>
-                <ComboBox fx:id="avatarCombo" maxWidth="Infinity" styleClass="dark-combo"/>
-                <Button text="Mettre à jour le sceau" onAction="#onUpdateAvatar" styleClass="btn-primary" maxWidth="Infinity"/>
+                    <!-- ============ Profil ============ -->
+                    <VBox spacing="18" prefWidth="380" maxHeight="-Infinity" alignment="TOP_LEFT" styleClass="card">
+                        <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+                        <Label text="Mon profil" styleClass="title-m"/>
 
-                <Separator/>
+                        <VBox spacing="8">
+                            <Label text="AVATAR" styleClass="muted"/>
+                            <ComboBox fx:id="avatarCombo" maxWidth="Infinity" styleClass="dark-combo"/>
+                            <Button text="Mettre à jour l'avatar" onAction="#onUpdateAvatar" styleClass="btn-primary" maxWidth="Infinity"/>
+                        </VBox>
 
-                <Label text="Email :" styleClass="muted"/>
-                <TextField fx:id="emailField" styleClass="input"/>
-                <Button text="Mettre à jour l'email" onAction="#onUpdateEmail" styleClass="btn-primary" maxWidth="Infinity"/>
+                        <Separator/>
 
-                <Separator/>
+                        <VBox spacing="8">
+                            <Label text="EMAIL" styleClass="muted"/>
+                            <TextField fx:id="emailField" styleClass="input"/>
+                            <Button text="Mettre à jour l'email" onAction="#onUpdateEmail" styleClass="btn-primary" maxWidth="Infinity"/>
+                        </VBox>
 
-                <Label text="Mot de passe :" styleClass="muted"/>
-                <PasswordField fx:id="oldPwdField" promptText="Ancien mot de passe" styleClass="input"/>
-                <PasswordField fx:id="newPwdField" promptText="Nouveau mot de passe" styleClass="input"/>
-                <PasswordField fx:id="newPwdConfirmField" promptText="Confirmer" styleClass="input"/>
-                <Button text="Changer le mot de passe" onAction="#onUpdatePassword" styleClass="btn-primary" maxWidth="Infinity"/>
+                        <Separator/>
 
-                <Label fx:id="profileMsgLabel" wrapText="true" styleClass="muted"/>
-            </VBox>
+                        <VBox spacing="8">
+                            <Label text="MOT DE PASSE" styleClass="muted"/>
+                            <PasswordField fx:id="oldPwdField" promptText="Ancien mot de passe" styleClass="input"/>
+                            <PasswordField fx:id="newPwdField" promptText="Nouveau mot de passe" styleClass="input"/>
+                            <PasswordField fx:id="newPwdConfirmField" promptText="Confirmer" styleClass="input"/>
+                            <Button text="Changer le mot de passe" onAction="#onUpdatePassword" styleClass="btn-primary" maxWidth="Infinity"/>
+                        </VBox>
 
-            <!-- ============ AMIS ============ -->
-            <VBox spacing="12" HBox.hgrow="ALWAYS" maxHeight="-Infinity" alignment="TOP_LEFT" styleClass="card">
-                <padding><Insets top="22" right="22" bottom="22" left="22"/></padding>
-                <Label text="🤝 Compagnons" styleClass="title-m"/>
+                        <Label fx:id="profileMsgLabel" wrapText="true" styleClass="muted"/>
+                    </VBox>
 
-                <!-- Ajouter -->
-                <HBox spacing="8" alignment="CENTER_LEFT">
-                    <TextField fx:id="addFriendField" promptText="pseudo#1234" HBox.hgrow="ALWAYS" styleClass="input"/>
-                    <Button text="Envoyer demande" onAction="#onSendRequest" styleClass="btn-primary"/>
+                    <!-- ============ Amis ============ -->
+                    <VBox spacing="16" HBox.hgrow="ALWAYS" maxHeight="-Infinity" alignment="TOP_LEFT" styleClass="card">
+                        <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+                        <Label text="Amis" styleClass="title-m"/>
+
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <TextField fx:id="addFriendField" promptText="pseudo#1234" HBox.hgrow="ALWAYS" styleClass="input"/>
+                            <Button text="Ajouter" onAction="#onSendRequest" styleClass="btn-primary"/>
+                        </HBox>
+                        <Label fx:id="addFriendMsgLabel" styleClass="muted"/>
+
+                        <Separator/>
+
+                        <TabPane prefHeight="420" tabClosingPolicy="UNAVAILABLE">
+                            <tabs>
+                                <Tab text="Tous">
+                                    <content>
+                                        <VBox spacing="10">
+                                            <padding><Insets top="14"/></padding>
+                                            <ListView fx:id="friendsList" VBox.vgrow="ALWAYS" styleClass="dark-list"/>
+                                            <HBox spacing="10">
+                                                <Button text="Inviter en partie" onAction="#onInviteFriend" styleClass="btn-primary"/>
+                                                <Region HBox.hgrow="ALWAYS"/>
+                                                <Button text="Retirer" onAction="#onRemoveFriend" styleClass="btn-danger"/>
+                                            </HBox>
+                                        </VBox>
+                                    </content>
+                                </Tab>
+                                <Tab fx:id="receivedTab" text="Reçues">
+                                    <content>
+                                        <VBox spacing="10">
+                                            <padding><Insets top="14"/></padding>
+                                            <ListView fx:id="receivedList" VBox.vgrow="ALWAYS" styleClass="dark-list"/>
+                                            <HBox spacing="10">
+                                                <Button text="Accepter" onAction="#onAcceptRequest" styleClass="btn-primary"/>
+                                                <Button text="Refuser" onAction="#onDeclineRequest" styleClass="btn-danger"/>
+                                            </HBox>
+                                        </VBox>
+                                    </content>
+                                </Tab>
+                                <Tab text="Envoyées">
+                                    <content>
+                                        <VBox spacing="10">
+                                            <padding><Insets top="14"/></padding>
+                                            <ListView fx:id="sentList" VBox.vgrow="ALWAYS" styleClass="dark-list"/>
+                                        </VBox>
+                                    </content>
+                                </Tab>
+                            </tabs>
+                        </TabPane>
+                    </VBox>
                 </HBox>
-                <Label fx:id="addFriendMsgLabel" styleClass="muted"/>
-
-                <Separator/>
-
-                <TabPane prefHeight="380" tabClosingPolicy="UNAVAILABLE">
-                    <tabs>
-                        <Tab text="Amis">
-                            <content>
-                                <VBox spacing="6">
-                                    <padding><Insets top="10"/></padding>
-                                    <ListView fx:id="friendsList" VBox.vgrow="ALWAYS" styleClass="dark-list"/>
-                                    <HBox spacing="8">
-                                        <Button text="Inviter dans ma partie" onAction="#onInviteFriend" styleClass="btn-primary"/>
-                                        <Region HBox.hgrow="ALWAYS"/>
-                                        <Button text="Retirer" onAction="#onRemoveFriend" styleClass="btn-danger"/>
-                                    </HBox>
-                                </VBox>
-                            </content>
-                        </Tab>
-                        <Tab fx:id="receivedTab" text="Demandes reçues">
-                            <content>
-                                <VBox spacing="6">
-                                    <padding><Insets top="10"/></padding>
-                                    <ListView fx:id="receivedList" VBox.vgrow="ALWAYS" styleClass="dark-list"/>
-                                    <HBox spacing="8">
-                                        <Button text="Accepter" onAction="#onAcceptRequest" styleClass="btn-primary"/>
-                                        <Button text="Refuser" onAction="#onDeclineRequest" styleClass="btn-danger"/>
-                                    </HBox>
-                                </VBox>
-                            </content>
-                        </Tab>
-                        <Tab text="Demandes envoyées">
-                            <content>
-                                <VBox spacing="6">
-                                    <padding><Insets top="10"/></padding>
-                                    <ListView fx:id="sentList" VBox.vgrow="ALWAYS" styleClass="dark-list"/>
-                                </VBox>
-                            </content>
-                        </Tab>
-                    </tabs>
-                </TabPane>
-            </VBox>
-        </HBox>
-        </ScrollPane>
-    </center>
-</BorderPane>
+            </ScrollPane>
+        </center>
+    </BorderPane>
+</StackPane>

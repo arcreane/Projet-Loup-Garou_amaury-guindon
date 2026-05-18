@@ -26,6 +26,7 @@ public class LobbyController {
 
     @FXML private Label              welcomeLabel;
     @FXML private Label              eloLabel;
+    @FXML private Label              gamesCountLabel;
     @FXML private ListView<GameSession> gameList;
     @FXML private TextField          newGameName;
     @FXML private CheckBox           rankedCheck;
@@ -36,7 +37,8 @@ public class LobbyController {
     @FXML private Button             profileBtn;
     @FXML private Button             invitationsBtn;
     @FXML private Label              errorLabel;
-    @FXML private BorderPane         rootPane;
+    @FXML private javafx.scene.layout.StackPane rootPane;
+    @FXML private javafx.scene.layout.Region    bgImage;
 
     private final GameService svc = new GameService();
     private final SocialService social = new SocialService();
@@ -44,10 +46,9 @@ public class LobbyController {
 
     @FXML
     public void initialize() {
-        if (rootPane != null) ThemeService.applyTavern(rootPane);
+        if (bgImage != null) ThemeService.applyTavern(bgImage);
         welcomeLabel.setText(Session.avatarUrl + "  " + Session.fullTag());
-        eloLabel.setText("ELO : " + Session.elo
-                + "   ·   " + Session.gamesWon + " W / " + Session.gamesPlayed + " G");
+        eloLabel.setText("⚔  " + Session.elo + " ELO");
 
         Label empty = new Label("Aucune partie en attente.\nCréez-en une à droite !");
         empty.setStyle("-fx-text-fill: -palette-parchment-2; -fx-font-family: 'IM Fell English','Georgia',serif; -fx-font-size: 15px; -fx-text-alignment: center;");
@@ -81,7 +82,7 @@ public class LobbyController {
         };
         t.setOnSucceeded(e -> Platform.runLater(() -> {
             int n = t.getValue().size();
-            invitationsBtn.setText(n > 0 ? ("📨 Invitations (" + n + ")") : "📨 Invitations");
+            invitationsBtn.setText(n > 0 ? ("📨  " + n) : "📨");
         }));
         new Thread(t).start();
     }
@@ -192,6 +193,9 @@ public class LobbyController {
                         if (g.id == selectedId) { gameList.getSelectionModel().select(g); break; }
                     }
                 }
+            }
+            if (gamesCountLabel != null) {
+                gamesCountLabel.setText(games.size() == 0 ? "" : games.size() + " disponible" + (games.size() > 1 ? "s" : ""));
             }
         });
         t.setOnFailed(e -> errorLabel.setText("Erreur réseau"));

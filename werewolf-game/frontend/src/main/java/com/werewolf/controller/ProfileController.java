@@ -29,7 +29,8 @@ public class ProfileController {
             "👤","🧙","🐺","👁","🧪","🏹","🌕","🦉","🦊","🦇","🕯","🗡"
     );
 
-    @FXML private BorderPane    rootPane;
+    @FXML private javafx.scene.layout.StackPane rootPane;
+    @FXML private javafx.scene.layout.Region    bgImage;
     @FXML private Label         myTagLabel;
 
     // Profil
@@ -52,7 +53,7 @@ public class ProfileController {
 
     @FXML
     public void initialize() {
-        if (rootPane != null) ThemeService.applyParchment(rootPane);
+        if (bgImage != null) ThemeService.applyTavern(bgImage);
 
         myTagLabel.setText(Session.avatarUrl + "  " + Session.fullTag());
 

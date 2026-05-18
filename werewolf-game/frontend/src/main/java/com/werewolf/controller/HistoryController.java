@@ -23,13 +23,14 @@ public class HistoryController {
     @FXML private ListView<String> leaderboardList;
     @FXML private Label            myStatsLabel;
     @FXML private Button           backBtn;
-    @FXML private BorderPane       rootPane;
+    @FXML private javafx.scene.layout.StackPane rootPane;
+    @FXML private javafx.scene.layout.Region    bgImage;
 
     private final GameService svc = new GameService();
 
     @FXML
     public void initialize() {
-        if (rootPane != null) ThemeService.applyParchment(rootPane);
+        if (bgImage != null) ThemeService.applyTavern(bgImage);
         myStatsLabel.setText(Session.avatarUrl + "  " + Session.pseudo
                 + "   ·   ELO " + Session.elo
                 + "   ·   " + Session.gamesWon + " victoires / " + Session.gamesPlayed + " parties");

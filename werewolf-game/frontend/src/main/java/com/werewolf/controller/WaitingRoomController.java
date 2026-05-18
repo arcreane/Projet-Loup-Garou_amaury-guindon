@@ -25,11 +25,13 @@ import javafx.util.Duration;
 public class WaitingRoomController {
 
     @FXML private Label gameLabel;
+    @FXML private Label countLabel;
     @FXML private ListView<Player> playerList;
     @FXML private Button startBtn;
     @FXML private Button leaveBtn;
     @FXML private Label errorLabel;
-    @FXML private BorderPane rootPane;
+    @FXML private javafx.scene.layout.StackPane rootPane;
+    @FXML private javafx.scene.layout.Region    bgImage;
 
     private final GameService svc = new GameService();
     private Timeline poller;
@@ -37,7 +39,7 @@ public class WaitingRoomController {
 
     @FXML
     public void initialize() {
-        if (rootPane != null) ThemeService.applyCampfire(rootPane);
+        if (bgImage != null) ThemeService.applyCampfire(bgImage);
         startBtn.setDisable(true);
         gameLabel.setText("Partie #" + Session.currentGameId);
         poll();
@@ -76,8 +78,12 @@ public class WaitingRoomController {
             iAmHost = s.players.stream().anyMatch(p -> p.id == Session.playerId && p.host());
             startBtn.setDisable(!iAmHost || s.players.size() < 4);
             startBtn.setText(iAmHost
-                    ? (s.players.size() < 4 ? "En attente (min 4 joueurs)" : "Démarrer la partie")
+                    ? (s.players.size() < 4 ? "En attente (4 joueurs minimum)" : "Démarrer la partie")
                     : "En attente de l'hôte...");
+
+            if (countLabel != null) {
+                countLabel.setText(s.players.size() + " joueur" + (s.players.size() > 1 ? "s" : ""));
+            }
 
             if (!"WAITING".equals(s.session.status)) {
                 stop();

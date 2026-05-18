@@ -35,6 +35,7 @@ public class LoginController {
     @FXML private Label         errorLabel;
     @FXML private Region        moonDeco;
     @FXML private StackPane     rootPane;
+    @FXML private Region        bgImage;
 
     private final AuthService auth = new AuthService();
     private final GameService svc  = new GameService();
@@ -42,12 +43,11 @@ public class LoginController {
     @FXML
     public void initialize() {
         avatarCombo.setItems(FXCollections.observableArrayList(AVATARS));
-        avatarCombo.setValue("🌕");
+        avatarCombo.setValue("👤");
 
-        if (rootPane != null) ThemeService.applyNight(rootPane);
+        if (bgImage != null) ThemeService.applyNight(bgImage);
 
         if (moonDeco != null) {
-            // Clip circulaire pour masquer les coins carrés de moon.png
             Circle clip = new Circle();
             clip.centerXProperty().bind(Bindings.divide(moonDeco.widthProperty(), 2));
             clip.centerYProperty().bind(Bindings.divide(moonDeco.heightProperty(), 2));
@@ -55,10 +55,9 @@ public class LoginController {
                     Bindings.min(moonDeco.widthProperty(), moonDeco.heightProperty()), 2));
             moonDeco.setClip(clip);
 
-            // Animation de respiration verticale
-            TranslateTransition tt = new TranslateTransition(Duration.seconds(4), moonDeco);
+            TranslateTransition tt = new TranslateTransition(Duration.seconds(5), moonDeco);
             tt.setFromY(0);
-            tt.setToY(-12);
+            tt.setToY(-10);
             tt.setAutoReverse(true);
             tt.setCycleCount(TranslateTransition.INDEFINITE);
             tt.setInterpolator(Interpolator.EASE_BOTH);

@@ -3,40 +3,44 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.werewolf.controller.HistoryController"
-            fx:id="rootPane"
-            styleClass="root-bg">
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.werewolf.controller.HistoryController"
+           fx:id="rootPane"
+           styleClass="root-bg">
 
-    <top>
-        <HBox alignment="CENTER_LEFT" spacing="14" styleClass="topbar">
-            <padding><Insets top="18" right="24" bottom="18" left="24"/></padding>
-            <Label text="📜 Le Grimoire" styleClass="title-l"/>
-            <Label text="•" styleClass="ornament"/>
-            <Label text="Histoires et Légendes" styleClass="subtitle"/>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Label fx:id="myStatsLabel" styleClass="muted"/>
-            <Button fx:id="backBtn" text="← Retour" onAction="#onBack" styleClass="btn-ghost"/>
-        </HBox>
-    </top>
+    <Region fx:id="bgImage" mouseTransparent="true"/>
+    <Region styleClass="bg-overlay" mouseTransparent="true"/>
 
-    <center>
-        <HBox spacing="22">
-            <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+    <BorderPane>
+        <top>
+            <HBox alignment="CENTER_LEFT" spacing="14" styleClass="topbar">
+                <padding><Insets top="18" right="28" bottom="18" left="28"/></padding>
+                <VBox>
+                    <Label text="Historique" styleClass="title-l"/>
+                    <Label text="Tes parties et le classement global" styleClass="muted"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="myStatsLabel" styleClass="badge"/>
+                <Button fx:id="backBtn" text="← Retour" onAction="#onBack" styleClass="btn-ghost"/>
+            </HBox>
+        </top>
 
-            <VBox spacing="12" HBox.hgrow="ALWAYS" styleClass="card">
-                <padding><Insets top="22" right="22" bottom="22" left="22"/></padding>
-                <Label text="⚔  Vos batailles passées" styleClass="title-m"/>
-                <Label text="50 dernières chroniques" styleClass="subtitle"/>
-                <ListView fx:id="historyList" VBox.vgrow="ALWAYS" styleClass="dark-list logs"/>
-            </VBox>
+        <center>
+            <HBox spacing="24">
+                <padding><Insets top="28" right="28" bottom="28" left="28"/></padding>
 
-            <VBox spacing="12" prefWidth="460" styleClass="card">
-                <padding><Insets top="22" right="22" bottom="22" left="22"/></padding>
-                <Label text="🏆  Les Légendes" styleClass="title-m"/>
-                <Label text="Classement par ELO" styleClass="subtitle"/>
-                <ListView fx:id="leaderboardList" VBox.vgrow="ALWAYS" styleClass="dark-list logs"/>
-            </VBox>
-        </HBox>
-    </center>
-</BorderPane>
+                <VBox spacing="14" HBox.hgrow="ALWAYS" styleClass="card">
+                    <padding><Insets top="22" right="22" bottom="22" left="22"/></padding>
+                    <Label text="Tes 50 dernières parties" styleClass="title-m"/>
+                    <ListView fx:id="historyList" VBox.vgrow="ALWAYS" styleClass="dark-list logs"/>
+                </VBox>
+
+                <VBox spacing="14" prefWidth="480" styleClass="card">
+                    <padding><Insets top="22" right="22" bottom="22" left="22"/></padding>
+                    <Label text="🏆  Top 50 ELO" styleClass="title-m"/>
+                    <ListView fx:id="leaderboardList" VBox.vgrow="ALWAYS" styleClass="dark-list logs"/>
+                </VBox>
+            </HBox>
+        </center>
+    </BorderPane>
+</StackPane>

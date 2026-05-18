@@ -8,26 +8,29 @@
            fx:id="rootStack"
            styleClass="root-bg">
 
-    <!-- Fond dynamique en overlay (utilisé pour transition jour/nuit) -->
-    <Region fx:id="dynamicBg" StackPane.alignment="CENTER" mouseTransparent="true"/>
+    <!-- Fond dynamique nuit/jour -->
+    <Region fx:id="dynamicBg" mouseTransparent="true"/>
+    <Region styleClass="bg-overlay" mouseTransparent="true"/>
 
-    <!-- Lune ou soleil décoratif (haut droite) -->
-    <Region fx:id="skyBody" styleClass="moon" StackPane.alignment="TOP_RIGHT">
-        <StackPane.margin><Insets top="64" right="48"/></StackPane.margin>
+    <!-- Astre céleste -->
+    <Region fx:id="skyBody" styleClass="moon" StackPane.alignment="TOP_RIGHT" mouseTransparent="true">
+        <StackPane.margin><Insets top="80" right="60"/></StackPane.margin>
     </Region>
 
     <BorderPane>
         <top>
-            <VBox spacing="8" styleClass="topbar">
-                <padding><Insets top="14" right="22" bottom="14" left="22"/></padding>
-                <HBox alignment="CENTER_LEFT" spacing="16">
-                    <Label fx:id="phaseLabel" styleClass="title-l"/>
+            <VBox spacing="10" styleClass="topbar">
+                <padding><Insets top="14" right="24" bottom="14" left="24"/></padding>
+                <HBox alignment="CENTER_LEFT" spacing="14">
+                    <VBox>
+                        <Label fx:id="phaseLabel" styleClass="title-l"/>
+                        <Label fx:id="roundLabel" styleClass="muted"/>
+                    </VBox>
                     <Region HBox.hgrow="ALWAYS"/>
                     <Label fx:id="rankedLabel" styleClass="badge"/>
-                    <Label fx:id="roundLabel"  styleClass="muted"/>
-                    <Label fx:id="roleLabel"   styleClass="badge"/>
+                    <Label fx:id="roleLabel"   styleClass="badge badge-accent"/>
                 </HBox>
-                <HBox alignment="CENTER_LEFT" spacing="10">
+                <HBox alignment="CENTER_LEFT" spacing="12">
                     <ProgressBar fx:id="phaseTimer" HBox.hgrow="ALWAYS" prefWidth="9999" styleClass="phase-timer"/>
                     <Label fx:id="timerLabel" styleClass="muted"/>
                 </HBox>
@@ -35,28 +38,28 @@
         </top>
 
         <left>
-            <VBox spacing="10" prefWidth="260" styleClass="card-dark">
-                <padding><Insets top="18" right="18" bottom="18" left="18"/></padding>
-                <Label text="⚔  Le Village" styleClass="title-m"/>
+            <VBox spacing="12" prefWidth="260" styleClass="card">
+                <padding><Insets top="20" right="18" bottom="20" left="18"/></padding>
+                <Label text="JOUEURS" styleClass="title-m"/>
                 <TreeView fx:id="playersTree" VBox.vgrow="ALWAYS" styleClass="dark-tree"/>
             </VBox>
         </left>
 
         <center>
-            <VBox spacing="10" styleClass="card-dark">
-                <padding><Insets top="18" right="18" bottom="18" left="18"/></padding>
-                <Label text="📜  Chronique du village" styleClass="title-m"/>
+            <VBox spacing="12" styleClass="card">
+                <padding><Insets top="20" right="18" bottom="20" left="18"/></padding>
+                <Label text="CHRONIQUE" styleClass="title-m"/>
                 <ListView fx:id="logsView" VBox.vgrow="ALWAYS" styleClass="dark-list logs"/>
             </VBox>
         </center>
 
         <right>
-            <VBox spacing="10" prefWidth="300" styleClass="card-dark action-panel">
-                <padding><Insets top="18" right="18" bottom="18" left="18"/></padding>
+            <VBox spacing="14" prefWidth="320" styleClass="card action-panel">
+                <padding><Insets top="20" right="18" bottom="20" left="18"/></padding>
                 <Label fx:id="actionTitle" text="Action" styleClass="title-m"/>
                 <Label fx:id="actionHint"  styleClass="muted" wrapText="true"/>
 
-                <ListView  fx:id="targetList"  prefHeight="200" styleClass="dark-list"/>
+                <ListView  fx:id="targetList"  prefHeight="220" styleClass="dark-list"/>
                 <ComboBox  fx:id="targetCombo" maxWidth="Infinity" styleClass="dark-combo"/>
 
                 <Button fx:id="primaryActionBtn"   text="Valider"  styleClass="btn-primary"   maxWidth="Infinity"/>
@@ -66,15 +69,14 @@
         </right>
 
         <bottom>
-            <VBox spacing="6" styleClass="card-dark chat-panel">
-                <padding><Insets top="10" right="18" bottom="10" left="18"/></padding>
-                <HBox alignment="CENTER_LEFT" spacing="10">
-                    <Label text="💬  Murmures" styleClass="title-m"/>
+            <VBox spacing="8" styleClass="card chat-panel">
+                <padding><Insets top="12" right="18" bottom="12" left="18"/></padding>
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label text="CHAT" styleClass="title-m"/>
                     <ComboBox fx:id="chatScope" prefWidth="120" styleClass="dark-combo"/>
-                    <Region HBox.hgrow="ALWAYS"/>
                 </HBox>
-                <ListView fx:id="chatView" prefHeight="120" styleClass="dark-list logs"/>
-                <HBox spacing="8">
+                <ListView fx:id="chatView" prefHeight="130" styleClass="dark-list logs"/>
+                <HBox spacing="10">
                     <TextField fx:id="chatField" promptText="Écrire un message..." HBox.hgrow="ALWAYS" styleClass="input"/>
                     <Button fx:id="chatSendBtn" text="Envoyer" onAction="#onSendChat" styleClass="btn-primary"/>
                 </HBox>
