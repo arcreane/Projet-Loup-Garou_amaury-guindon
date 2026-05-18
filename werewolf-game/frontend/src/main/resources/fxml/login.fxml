@@ -1,26 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <StackPane xmlns:fx="http://javafx.com/fxml"
            fx:controller="com.werewolf.controller.LoginController"
            styleClass="root-bg">
-    <VBox alignment="CENTER" spacing="12" maxWidth="380" styleClass="card">
-        <padding><Insets top="32" right="40" bottom="32" left="40"/></padding>
 
-        <Label text="🌕 Loup-Garou" styleClass="title-xl"/>
-        <Label text="Connexion à votre village" styleClass="subtitle"/>
+    <!-- Lune décorative en haut -->
+    <Region fx:id="moonDeco" styleClass="moon" StackPane.alignment="TOP_CENTER">
+        <StackPane.margin><Insets top="32"/></StackPane.margin>
+    </Region>
 
-        <TextField fx:id="pseudoField" promptText="Pseudo" styleClass="input"/>
-        <TextField fx:id="emailField"  promptText="Email (inscription)" styleClass="input"/>
-        <PasswordField fx:id="passwordField" promptText="Mot de passe" styleClass="input"/>
+    <!-- Lueur de lanterne en bas gauche -->
+    <Region styleClass="lantern-glow" StackPane.alignment="BOTTOM_LEFT">
+        <StackPane.margin><Insets bottom="-40" left="-40"/></StackPane.margin>
+    </Region>
+
+    <!-- Carte parchemin centrée -->
+    <VBox alignment="CENTER" spacing="14" maxWidth="420" styleClass="card">
+        <padding><Insets top="40" right="50" bottom="40" left="50"/></padding>
+
+        <Label text="Loup-Garou" styleClass="title-xl"/>
+        <Label text="✦  De Thiercelieux  ✦" styleClass="ornament"/>
+        <Label text="Entrez dans la légende" styleClass="subtitle"/>
+
+        <Region prefHeight="6"/>
+
+        <TextField fx:id="pseudoField" promptText="Votre nom..." styleClass="input"/>
+        <TextField fx:id="emailField"  promptText="Adresse (pour l'inscription)" styleClass="input"/>
+        <PasswordField fx:id="passwordField" promptText="Mot de passe secret" styleClass="input"/>
 
         <HBox spacing="10" alignment="CENTER_LEFT">
-            <Label text="Avatar :" styleClass="muted"/>
-            <ComboBox fx:id="avatarCombo" prefWidth="100" styleClass="dark-combo"/>
-            <Label text="(visible des autres joueurs)" styleClass="muted"/>
+            <Label text="Sceau :" styleClass="muted"/>
+            <ComboBox fx:id="avatarCombo" prefWidth="110" styleClass="dark-combo"/>
         </HBox>
+
+        <Region prefHeight="6"/>
 
         <HBox spacing="10" alignment="CENTER">
             <Button fx:id="loginBtn"    text="Se connecter" onAction="#onLogin"    styleClass="btn-primary"/>

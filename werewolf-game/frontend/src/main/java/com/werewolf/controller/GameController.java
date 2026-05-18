@@ -10,13 +10,17 @@ import com.werewolf.service.GameService;
 import com.werewolf.service.Session;
 import com.werewolf.service.SoundPlayer;
 import javafx.animation.FadeTransition;
+import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
+import javafx.animation.RotateTransition;
+import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.Region;
 import javafx.util.Duration;
 
 import java.util.List;
@@ -56,6 +60,10 @@ public class GameController {
     @FXML private ComboBox<String>   chatScope;
     @FXML private Button             chatSendBtn;
 
+    // Décors dynamiques (fond + lune/soleil)
+    @FXML private Region             dynamicBg;
+    @FXML private Region             skyBody;
+
     private final GameService svc = new GameService();
     private Timeline poller;
 
@@ -70,6 +78,14 @@ public class GameController {
 
     @FXML
     public void initialize() {
+        // Le fond dynamique doit remplir tout l'écran
+        if (dynamicBg != null) {
+            dynamicBg.setOpacity(0);
+            dynamicBg.prefWidthProperty().bind(((javafx.scene.layout.StackPane) dynamicBg.getParent()).widthProperty());
+            dynamicBg.prefHeightProperty().bind(((javafx.scene.layout.StackPane) dynamicBg.getParent()).heightProperty());
+        }
+        if (skyBody != null) skyBody.setOpacity(0);
+
         targetList.setCellFactory(lv -> new ListCell<>() {
             @Override protected void updateItem(Player p, boolean empty) {
                 super.updateItem(p, empty);
@@ -162,7 +178,10 @@ public class GameController {
 
         buildActionPanel(s);
 
-        // Sons selon transitions
+        // Sons + transitions visuelles
+        if (!Objects.equals(lastStatus, s.session.status)) {
+            applyDayNightTheme(s.session.status);
+        }
         if (!Objects.equals(lastPhase, s.session.phase)) {
             if ("NIGHT".equals(s.session.status)) SoundPlayer.play("night");
             if ("DAY".equals(s.session.status))   SoundPlayer.play("day");
@@ -445,6 +464,40 @@ public class GameController {
         ft.setFromValue(0.2);
         ft.setToValue(1.0);
         ft.play();
+    }
+
+    // =====================================================
+    //              ANIMATIONS NUIT / JOUR
+    // =====================================================
+    private void applyDayNightTheme(String status) {
+        if (dynamicBg != null) {
+            dynamicBg.getStyleClass().removeAll("root-bg", "root-bg-day", "root-bg-parchment");
+            String cls = "DAY".equals(status) ? "root-bg-day" : "root-bg";
+            dynamicBg.getStyleClass().add(cls);
+            // Fondu doux du fond
+            FadeTransition ft = new FadeTransition(Duration.seconds(1.2), dynamicBg);
+            ft.setFromValue(0.0);
+            ft.setToValue(1.0);
+            ft.play();
+        }
+        if (skyBody != null) {
+            // La lune/soleil traverse le ciel : rotation + petit rebond
+            skyBody.setTranslateY(80);
+            skyBody.setOpacity(0);
+            FadeTransition fade = new FadeTransition(Duration.seconds(1.5), skyBody);
+            fade.setFromValue(0);
+            fade.setToValue(1);
+            javafx.animation.TranslateTransition tt = new javafx.animation.TranslateTransition(Duration.seconds(1.5), skyBody);
+            tt.setFromY(80);
+            tt.setToY(0);
+            tt.setInterpolator(Interpolator.EASE_OUT);
+            ScaleTransition st = new ScaleTransition(Duration.seconds(0.8), skyBody);
+            st.setFromX(0.6); st.setFromY(0.6);
+            st.setToX(1.0); st.setToY(1.0);
+            fade.play();
+            tt.play();
+            st.play();
+        }
     }
 
     interface ThrowingRunnable { void run() throws Exception; }

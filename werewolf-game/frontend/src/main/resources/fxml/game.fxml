@@ -3,71 +3,82 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.werewolf.controller.GameController"
-            styleClass="root-bg">
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.werewolf.controller.GameController"
+           fx:id="rootStack"
+           styleClass="root-bg">
 
-    <top>
-        <VBox spacing="6" styleClass="topbar">
-            <padding><Insets top="14" right="20" bottom="14" left="20"/></padding>
-            <HBox alignment="CENTER_LEFT" spacing="14">
-                <Label fx:id="phaseLabel" styleClass="title-l"/>
-                <Region HBox.hgrow="ALWAYS"/>
-                <Label fx:id="rankedLabel" styleClass="badge"/>
-                <Label fx:id="roundLabel"  styleClass="muted"/>
-                <Label fx:id="roleLabel"   styleClass="badge"/>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" spacing="10">
-                <ProgressBar fx:id="phaseTimer" HBox.hgrow="ALWAYS" prefWidth="9999" styleClass="phase-timer"/>
-                <Label fx:id="timerLabel" styleClass="muted"/>
-            </HBox>
-        </VBox>
-    </top>
+    <!-- Fond dynamique en overlay (utilisé pour transition jour/nuit) -->
+    <Region fx:id="dynamicBg" StackPane.alignment="CENTER" mouseTransparent="true"/>
 
-    <left>
-        <VBox spacing="10" prefWidth="240" styleClass="card">
-            <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
-            <Label text="Village" styleClass="title-m"/>
-            <TreeView fx:id="playersTree" VBox.vgrow="ALWAYS" styleClass="dark-tree"/>
-        </VBox>
-    </left>
+    <!-- Lune ou soleil décoratif (haut droite) -->
+    <Region fx:id="skyBody" styleClass="moon" StackPane.alignment="TOP_RIGHT">
+        <StackPane.margin><Insets top="64" right="48"/></StackPane.margin>
+    </Region>
 
-    <center>
-        <VBox spacing="10" styleClass="card">
-            <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
-            <Label text="📜 Chronique du village" styleClass="title-m"/>
-            <ListView fx:id="logsView" VBox.vgrow="ALWAYS" styleClass="dark-list logs"/>
-        </VBox>
-    </center>
+    <BorderPane>
+        <top>
+            <VBox spacing="8" styleClass="topbar">
+                <padding><Insets top="14" right="22" bottom="14" left="22"/></padding>
+                <HBox alignment="CENTER_LEFT" spacing="16">
+                    <Label fx:id="phaseLabel" styleClass="title-l"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="rankedLabel" styleClass="badge"/>
+                    <Label fx:id="roundLabel"  styleClass="muted"/>
+                    <Label fx:id="roleLabel"   styleClass="badge"/>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <ProgressBar fx:id="phaseTimer" HBox.hgrow="ALWAYS" prefWidth="9999" styleClass="phase-timer"/>
+                    <Label fx:id="timerLabel" styleClass="muted"/>
+                </HBox>
+            </VBox>
+        </top>
 
-    <right>
-        <VBox spacing="10" prefWidth="280" styleClass="card action-panel">
-            <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
-            <Label fx:id="actionTitle" text="Action" styleClass="title-m"/>
-            <Label fx:id="actionHint"  styleClass="muted" wrapText="true"/>
+        <left>
+            <VBox spacing="10" prefWidth="260" styleClass="card-dark">
+                <padding><Insets top="18" right="18" bottom="18" left="18"/></padding>
+                <Label text="⚔  Le Village" styleClass="title-m"/>
+                <TreeView fx:id="playersTree" VBox.vgrow="ALWAYS" styleClass="dark-tree"/>
+            </VBox>
+        </left>
 
-            <ListView  fx:id="targetList"  prefHeight="180" styleClass="dark-list"/>
-            <ComboBox  fx:id="targetCombo" maxWidth="Infinity" styleClass="dark-combo"/>
+        <center>
+            <VBox spacing="10" styleClass="card-dark">
+                <padding><Insets top="18" right="18" bottom="18" left="18"/></padding>
+                <Label text="📜  Chronique du village" styleClass="title-m"/>
+                <ListView fx:id="logsView" VBox.vgrow="ALWAYS" styleClass="dark-list logs"/>
+            </VBox>
+        </center>
 
-            <Button fx:id="primaryActionBtn"   text="Valider"  styleClass="btn-primary"   maxWidth="Infinity"/>
-            <Button fx:id="secondaryActionBtn" text="Action 2" styleClass="btn-danger"    maxWidth="Infinity"/>
-            <Button fx:id="passBtn"            text="Passer"   styleClass="btn-ghost"     maxWidth="Infinity"/>
-        </VBox>
-    </right>
+        <right>
+            <VBox spacing="10" prefWidth="300" styleClass="card-dark action-panel">
+                <padding><Insets top="18" right="18" bottom="18" left="18"/></padding>
+                <Label fx:id="actionTitle" text="Action" styleClass="title-m"/>
+                <Label fx:id="actionHint"  styleClass="muted" wrapText="true"/>
 
-    <bottom>
-        <VBox spacing="6" styleClass="card chat-panel">
-            <padding><Insets top="10" right="16" bottom="10" left="16"/></padding>
-            <HBox alignment="CENTER_LEFT" spacing="10">
-                <Label text="💬 Chat" styleClass="title-m"/>
-                <ComboBox fx:id="chatScope" prefWidth="120" styleClass="dark-combo"/>
-                <Region HBox.hgrow="ALWAYS"/>
-            </HBox>
-            <ListView fx:id="chatView" prefHeight="120" styleClass="dark-list logs"/>
-            <HBox spacing="8">
-                <TextField fx:id="chatField" promptText="Écrire un message..." HBox.hgrow="ALWAYS" styleClass="input"/>
-                <Button fx:id="chatSendBtn" text="Envoyer" onAction="#onSendChat" styleClass="btn-primary"/>
-            </HBox>
-        </VBox>
-    </bottom>
-</BorderPane>
+                <ListView  fx:id="targetList"  prefHeight="200" styleClass="dark-list"/>
+                <ComboBox  fx:id="targetCombo" maxWidth="Infinity" styleClass="dark-combo"/>
+
+                <Button fx:id="primaryActionBtn"   text="Valider"  styleClass="btn-primary"   maxWidth="Infinity"/>
+                <Button fx:id="secondaryActionBtn" text="Action 2" styleClass="btn-danger"    maxWidth="Infinity"/>
+                <Button fx:id="passBtn"            text="Passer"   styleClass="btn-ghost"     maxWidth="Infinity"/>
+            </VBox>
+        </right>
+
+        <bottom>
+            <VBox spacing="6" styleClass="card-dark chat-panel">
+                <padding><Insets top="10" right="18" bottom="10" left="18"/></padding>
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="💬  Murmures" styleClass="title-m"/>
+                    <ComboBox fx:id="chatScope" prefWidth="120" styleClass="dark-combo"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                </HBox>
+                <ListView fx:id="chatView" prefHeight="120" styleClass="dark-list logs"/>
+                <HBox spacing="8">
+                    <TextField fx:id="chatField" promptText="Écrire un message..." HBox.hgrow="ALWAYS" styleClass="input"/>
+                    <Button fx:id="chatSendBtn" text="Envoyer" onAction="#onSendChat" styleClass="btn-primary"/>
+                </HBox>
+            </VBox>
+        </bottom>
+    </BorderPane>
+</StackPane>

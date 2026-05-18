@@ -1,225 +1,447 @@
 /* =========================================================
-   Loup-Garou - Thème sombre / ambiance mystère
+   🌕 LOUP-GAROU - Thème Médiéval Gothique
+   Palette : parchemin, encre brûlée, sang séché, lune d'argent
+   Fonts : Cinzel (titres) + IM Fell English (corps)
    ========================================================= */
+
+/* ---------- Palette ---------- */
+* {
+    -palette-parchment:    #e8d8b0;
+    -palette-parchment-2:  #c9b388;
+    -palette-ink:          #2a1810;
+    -palette-ink-2:        #4a2c1c;
+    -palette-blood:        #8b1e1e;
+    -palette-blood-dark:   #5c0f0f;
+    -palette-gold:         #c9a44c;
+    -palette-gold-dark:    #8e6c1c;
+    -palette-moonlight:    #d9e3f0;
+    -palette-night:        #0c0a14;
+    -palette-night-2:      #1a1626;
+    -palette-shadow:       #050308;
+}
 
 .root {
     -fx-font-family: "Segoe UI", "Helvetica Neue", sans-serif;
     -fx-font-size: 13px;
-    -fx-text-fill: #e8e6e3;
-    -fx-base: #1d1c25;
+    -fx-text-fill: -palette-parchment;
+    -fx-base: -palette-ink;
     -fx-background-color: transparent;
 }
 
-/* fond global avec dégradé */
+/* ---------- Fond global : nuit étoilée par défaut ---------- */
 .root-bg {
-    -fx-background-color: linear-gradient(to bottom right, #15131a, #2a1f2e 60%, #1a1622);
+    -fx-background-color:
+        radial-gradient(center 30% 25%, radius 60%, rgba(217,227,240,0.12), transparent),
+        radial-gradient(center 70% 80%, radius 70%, rgba(139,30,30,0.15), transparent),
+        linear-gradient(to bottom, #0a0815 0%, #15101f 40%, #1d1322 70%, #0a0610 100%);
 }
 
-/* cartes */
+/* Variante "jour" - sépia parchemin */
+.root-bg-day {
+    -fx-background-color:
+        radial-gradient(center 50% 30%, radius 70%, rgba(255,200,120,0.25), transparent),
+        linear-gradient(to bottom, #2a1a10 0%, #4a2a18 50%, #2a1810 100%);
+}
+
+/* Variante "parchemin" (login, lobby) */
+.root-bg-parchment {
+    -fx-background-color:
+        radial-gradient(center 50% 0%, radius 90%, rgba(200,150,80,0.18), transparent),
+        radial-gradient(center 50% 100%, radius 90%, rgba(40,20,10,0.5), transparent),
+        linear-gradient(to bottom, #1a1208 0%, #2a1810 50%, #0f0805 100%);
+}
+
+/* ---------- Cartes parchemin ---------- */
 .card {
-    -fx-background-color: rgba(38, 33, 50, 0.92);
-    -fx-background-radius: 14;
-    -fx-border-color: rgba(120, 85, 200, 0.25);
-    -fx-border-radius: 14;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 14, 0.1, 0, 4);
+    -fx-background-color:
+        linear-gradient(to bottom right, rgba(232,216,176,0.95), rgba(201,179,136,0.92));
+    -fx-background-radius: 6;
+    -fx-border-color: -palette-ink-2;
+    -fx-border-width: 2;
+    -fx-border-radius: 6;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 20, 0.3, 0, 6);
+    -fx-padding: 4;
+}
+.card .label, .card Label {
+    -fx-text-fill: -palette-ink;
 }
 
-/* topbar */
+/* Carte sombre (utilisée en jeu pour les panels) */
+.card-dark {
+    -fx-background-color:
+        linear-gradient(to bottom, rgba(20,15,30,0.88), rgba(10,8,18,0.94));
+    -fx-background-radius: 6;
+    -fx-border-color: -palette-gold-dark;
+    -fx-border-width: 2;
+    -fx-border-radius: 6;
+    -fx-effect: dropshadow(gaussian, rgba(201,164,76,0.25), 18, 0.25, 0, 4);
+}
+.card-dark .label, .card-dark Label {
+    -fx-text-fill: -palette-parchment;
+}
+
+/* ---------- Topbar - bandeau de bois ---------- */
 .topbar {
-    -fx-background-color: rgba(20, 17, 28, 0.7);
-    -fx-border-color: transparent transparent rgba(140, 100, 220, 0.3) transparent;
-    -fx-border-width: 0 0 1 0;
+    -fx-background-color:
+        linear-gradient(to bottom, #3a2418 0%, #2a1810 50%, #1a0e08 100%);
+    -fx-border-color: transparent transparent -palette-gold-dark transparent;
+    -fx-border-width: 0 0 3 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 12, 0.2, 0, 4);
 }
+.topbar .label { -fx-text-fill: -palette-parchment; }
 
-/* ----- Typographie ----- */
+/* ---------- Typographie ---------- */
 .title-xl {
-    -fx-font-size: 30px;
+    -fx-font-family: "Cinzel", "Trajan Pro", "Georgia", serif;
+    -fx-font-size: 42px;
     -fx-font-weight: bold;
-    -fx-text-fill: #e9d8ff;
+    -fx-text-fill: -palette-gold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.9), 8, 0.5, 2, 3);
 }
 .title-l {
-    -fx-font-size: 22px;
+    -fx-font-family: "Cinzel", "Trajan Pro", "Georgia", serif;
+    -fx-font-size: 24px;
     -fx-font-weight: bold;
-    -fx-text-fill: #f0e3ff;
+    -fx-text-fill: -palette-gold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 4, 0.3, 1, 2);
 }
 .title-m {
+    -fx-font-family: "Cinzel", "Trajan Pro", "Georgia", serif;
     -fx-font-size: 16px;
     -fx-font-weight: bold;
-    -fx-text-fill: #cfb8ee;
+    -fx-text-fill: -palette-blood;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 2, 0.2, 0, 1);
 }
+.card-dark .title-m { -fx-text-fill: -palette-gold; }
+
 .subtitle {
-    -fx-text-fill: #a99cc4;
+    -fx-font-family: "IM Fell English", "Georgia", serif;
+    -fx-text-fill: -palette-ink-2;
     -fx-font-style: italic;
+    -fx-font-size: 14px;
 }
+.card-dark .subtitle { -fx-text-fill: -palette-parchment-2; }
+
 .muted {
-    -fx-text-fill: #8a83a0;
+    -fx-text-fill: -palette-ink-2;
     -fx-font-size: 12px;
+    -fx-font-family: "IM Fell English", "Georgia", serif;
 }
+.card-dark .muted { -fx-text-fill: derive(-palette-parchment, -25%); }
+.topbar .muted   { -fx-text-fill: -palette-parchment-2; }
+
 .error {
-    -fx-text-fill: #ff6c8a;
-    -fx-font-size: 12px;
-}
-.badge {
-    -fx-background-color: linear-gradient(to right, #7a4dd1, #c44f8a);
-    -fx-text-fill: white;
-    -fx-padding: 4 12 4 12;
-    -fx-background-radius: 12;
-    -fx-font-size: 12px;
+    -fx-text-fill: -palette-blood;
+    -fx-font-size: 13px;
     -fx-font-weight: bold;
+    -fx-font-family: "IM Fell English", "Georgia", serif;
+}
+
+/* ---------- Badges (rôle, classée, etc.) ---------- */
+.badge {
+    -fx-background-color: linear-gradient(to bottom, -palette-blood, -palette-blood-dark);
+    -fx-text-fill: -palette-parchment;
+    -fx-padding: 5 14 5 14;
+    -fx-background-radius: 3;
+    -fx-border-color: -palette-gold-dark;
+    -fx-border-width: 1;
+    -fx-border-radius: 3;
+    -fx-font-family: "Cinzel", "Georgia", serif;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 4, 0.3, 0, 2);
 }
 .badge-ranked {
-    -fx-background-color: linear-gradient(to right, #e0a63c, #ff8c42);
+    -fx-background-color: linear-gradient(to bottom, -palette-gold, -palette-gold-dark);
+    -fx-text-fill: -palette-ink;
 }
 .badge-casual {
-    -fx-background-color: linear-gradient(to right, #4a4358, #6a5478);
+    -fx-background-color: linear-gradient(to bottom, #4a4358, #2a2238);
 }
 
-/* Chat panel */
-.chat-panel {
-    -fx-border-color: rgba(108, 209, 255, 0.35);
-}
-
-/* ----- Inputs ----- */
+/* ---------- Inputs ---------- */
 .input, .text-field, .password-field {
-    -fx-background-color: rgba(50, 42, 70, 0.8);
-    -fx-text-fill: #f0eaff;
-    -fx-prompt-text-fill: #7c728e;
-    -fx-background-radius: 8;
-    -fx-border-color: rgba(140, 100, 220, 0.25);
-    -fx-border-radius: 8;
-    -fx-padding: 8 12 8 12;
+    -fx-background-color: rgba(255,245,220,0.85);
+    -fx-text-fill: -palette-ink;
+    -fx-prompt-text-fill: derive(-palette-ink, 60%);
+    -fx-background-radius: 3;
+    -fx-border-color: -palette-ink-2;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 3;
+    -fx-padding: 9 12 9 12;
+    -fx-font-family: "IM Fell English", "Georgia", serif;
+    -fx-font-size: 14px;
 }
 .input:focused, .text-field:focused, .password-field:focused {
-    -fx-border-color: #b18cf2;
+    -fx-border-color: -palette-blood;
+    -fx-effect: dropshadow(gaussian, rgba(139,30,30,0.5), 5, 0.4, 0, 0);
 }
 
-/* ----- Boutons ----- */
+/* ---------- Boutons ---------- */
 .btn-primary {
-    -fx-background-color: linear-gradient(to bottom, #7e4ddb, #5a32a8);
-    -fx-text-fill: white;
+    -fx-background-color: linear-gradient(to bottom, -palette-blood, -palette-blood-dark);
+    -fx-text-fill: -palette-parchment;
+    -fx-font-family: "Cinzel", "Georgia", serif;
     -fx-font-weight: bold;
-    -fx-padding: 8 18 8 18;
-    -fx-background-radius: 8;
+    -fx-padding: 10 22 10 22;
+    -fx-background-radius: 3;
+    -fx-border-color: -palette-gold-dark;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 3;
     -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.55), 6, 0.3, 0, 3);
 }
-.btn-primary:hover { -fx-background-color: linear-gradient(to bottom, #9a6cf2, #7045c7); }
-.btn-primary:disabled { -fx-opacity: 0.4; }
+.btn-primary:hover {
+    -fx-background-color: linear-gradient(to bottom, derive(-palette-blood, 10%), -palette-blood);
+    -fx-border-color: -palette-gold;
+}
+.btn-primary:pressed { -fx-translate-y: 1; }
+.btn-primary:disabled { -fx-opacity: 0.45; }
 
 .btn-ghost {
     -fx-background-color: transparent;
-    -fx-text-fill: #cfb8ee;
-    -fx-border-color: rgba(140, 100, 220, 0.4);
-    -fx-border-radius: 8;
-    -fx-background-radius: 8;
-    -fx-padding: 8 18 8 18;
+    -fx-text-fill: -palette-gold;
+    -fx-font-family: "Cinzel", "Georgia", serif;
+    -fx-font-weight: bold;
+    -fx-border-color: -palette-gold-dark;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+    -fx-padding: 10 22 10 22;
     -fx-cursor: hand;
 }
-.btn-ghost:hover { -fx-background-color: rgba(140, 100, 220, 0.15); }
+.btn-ghost:hover {
+    -fx-background-color: rgba(201,164,76,0.18);
+    -fx-border-color: -palette-gold;
+}
 
 .btn-danger {
-    -fx-background-color: linear-gradient(to bottom, #c1395f, #8a1f3e);
-    -fx-text-fill: white;
+    -fx-background-color: linear-gradient(to bottom, #5c0f0f, #2c0707);
+    -fx-text-fill: -palette-parchment;
+    -fx-font-family: "Cinzel", "Georgia", serif;
     -fx-font-weight: bold;
-    -fx-padding: 8 18 8 18;
-    -fx-background-radius: 8;
+    -fx-padding: 10 22 10 22;
+    -fx-background-radius: 3;
+    -fx-border-color: -palette-blood;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 3;
     -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(139,30,30,0.6), 8, 0.4, 0, 2);
 }
-.btn-danger:hover { -fx-background-color: linear-gradient(to bottom, #e05378, #b1305a); }
+.btn-danger:hover { -fx-background-color: linear-gradient(to bottom, -palette-blood, -palette-blood-dark); }
 
-/* ----- Listes ----- */
+/* ---------- Listes ---------- */
 .dark-list, .dark-list .list-cell {
-    -fx-background-color: rgba(30, 26, 40, 0.6);
-    -fx-control-inner-background: rgba(30, 26, 40, 0.6);
-    -fx-text-fill: #e8e6e3;
-    -fx-background-radius: 8;
+    -fx-background-color: rgba(40,28,20,0.7);
+    -fx-control-inner-background: rgba(40,28,20,0.7);
+    -fx-text-fill: -palette-parchment;
+    -fx-background-radius: 3;
+    -fx-border-color: -palette-gold-dark;
+    -fx-border-width: 1;
+    -fx-border-radius: 3;
 }
 .dark-list .list-cell {
-    -fx-padding: 8 12 8 12;
-    -fx-border-color: transparent transparent rgba(140,100,220,0.1) transparent;
+    -fx-padding: 9 14 9 14;
+    -fx-border-color: transparent transparent rgba(201,164,76,0.15) transparent;
+    -fx-font-family: "IM Fell English", "Georgia", serif;
+    -fx-font-size: 14px;
 }
 .dark-list .list-cell:filled:selected {
-    -fx-background-color: linear-gradient(to right, #7a4dd1, #5d34a4);
-    -fx-text-fill: white;
+    -fx-background-color: linear-gradient(to right, -palette-blood-dark, -palette-blood);
+    -fx-text-fill: -palette-parchment;
 }
 .dark-list .list-cell:filled:hover {
-    -fx-background-color: rgba(140, 100, 220, 0.18);
+    -fx-background-color: rgba(201,164,76,0.18);
+}
+
+/* Variante parchemin (sur cartes claires) */
+.card .dark-list, .card .dark-list .list-cell {
+    -fx-background-color: rgba(255,245,220,0.6);
+    -fx-control-inner-background: rgba(255,245,220,0.6);
+    -fx-text-fill: -palette-ink;
+}
+.card .dark-list .list-cell:filled:selected {
+    -fx-background-color: linear-gradient(to right, -palette-blood, -palette-blood-dark);
+    -fx-text-fill: -palette-parchment;
 }
 
 .dark-list.logs .list-cell {
-    -fx-font-family: "Consolas", "Courier New", monospace;
-    -fx-text-fill: #c8c2da;
-    -fx-font-size: 12px;
+    -fx-font-family: "IM Fell English", "Georgia", serif;
+    -fx-font-size: 13px;
+    -fx-text-fill: derive(-palette-parchment, -15%);
 }
 
-/* ----- TreeView ----- */
+/* ---------- TreeView ---------- */
 .dark-tree {
-    -fx-background-color: rgba(30, 26, 40, 0.6);
-    -fx-control-inner-background: rgba(30, 26, 40, 0.6);
-    -fx-background-radius: 8;
+    -fx-background-color: rgba(40,28,20,0.7);
+    -fx-control-inner-background: rgba(40,28,20,0.7);
+    -fx-background-radius: 3;
+    -fx-border-color: -palette-gold-dark;
+    -fx-border-width: 1;
+    -fx-border-radius: 3;
 }
 .dark-tree .tree-cell {
-    -fx-text-fill: #e8e6e3;
-    -fx-padding: 4 8 4 8;
+    -fx-text-fill: -palette-parchment;
+    -fx-padding: 6 10 6 10;
     -fx-background-color: transparent;
+    -fx-font-family: "IM Fell English", "Georgia", serif;
+    -fx-font-size: 13px;
+}
+.dark-tree .tree-cell:filled:hover {
+    -fx-background-color: rgba(201,164,76,0.18);
 }
 .dark-tree .tree-cell:filled:selected {
-    -fx-background-color: rgba(140,100,220,0.3);
-    -fx-text-fill: white;
+    -fx-background-color: rgba(139,30,30,0.5);
+    -fx-text-fill: -palette-parchment;
 }
 
-/* ----- ComboBox ----- */
+/* ---------- ComboBox ---------- */
 .dark-combo {
-    -fx-background-color: rgba(50, 42, 70, 0.8);
-    -fx-text-fill: white;
-    -fx-background-radius: 8;
+    -fx-background-color: rgba(255,245,220,0.85);
+    -fx-text-fill: -palette-ink;
+    -fx-background-radius: 3;
+    -fx-border-color: -palette-ink-2;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 3;
 }
 .dark-combo .list-cell {
-    -fx-text-fill: #e8e6e3;
+    -fx-text-fill: -palette-ink;
     -fx-background-color: transparent;
     -fx-padding: 6 10 6 10;
+    -fx-font-family: "IM Fell English", "Georgia", serif;
 }
-.dark-combo .arrow { -fx-background-color: #cfb8ee; }
-.dark-combo-popup .list-view {
-    -fx-background-color: #2a2238;
-}
+.dark-combo .arrow { -fx-background-color: -palette-ink; }
+.dark-combo-popup .list-view { -fx-background-color: -palette-parchment-2; }
 
-/* ----- ProgressBar (timer phase) ----- */
+/* ---------- ProgressBar (sablier de la phase) ---------- */
 .phase-timer .bar {
-    -fx-background-color: linear-gradient(to right, #ff6c8a, #b18cf2, #6ed1ff);
-    -fx-background-radius: 4;
+    -fx-background-color: linear-gradient(to right, -palette-blood, -palette-gold, -palette-moonlight);
+    -fx-background-radius: 2;
+    -fx-effect: dropshadow(gaussian, rgba(201,164,76,0.5), 6, 0.4, 0, 0);
 }
 .phase-timer .track {
-    -fx-background-color: rgba(0,0,0,0.4);
-    -fx-background-radius: 4;
+    -fx-background-color: rgba(0,0,0,0.7);
+    -fx-background-radius: 2;
+    -fx-border-color: -palette-gold-dark;
+    -fx-border-width: 1;
+    -fx-border-radius: 2;
 }
-.phase-timer {
-    -fx-pref-height: 8;
-}
+.phase-timer { -fx-pref-height: 10; }
 
-/* ----- ScrollBar (sobre) ----- */
+/* ---------- ScrollBar ---------- */
 .scroll-bar:vertical, .scroll-bar:horizontal {
     -fx-background-color: transparent;
 }
 .scroll-bar .thumb {
-    -fx-background-color: rgba(140, 100, 220, 0.4);
-    -fx-background-radius: 6;
+    -fx-background-color: -palette-gold-dark;
+    -fx-background-radius: 4;
 }
-.scroll-bar .thumb:hover { -fx-background-color: rgba(140, 100, 220, 0.7); }
+.scroll-bar .thumb:hover { -fx-background-color: -palette-gold; }
 
-/* ----- Action panel emphasis ----- */
+/* ---------- CheckBox ---------- */
+.check-box {
+    -fx-text-fill: -palette-ink;
+    -fx-font-family: "IM Fell English", "Georgia", serif;
+    -fx-font-size: 13px;
+}
+.card-dark .check-box { -fx-text-fill: -palette-parchment; }
+.check-box .box {
+    -fx-background-color: rgba(255,245,220,0.85);
+    -fx-border-color: -palette-ink-2;
+    -fx-border-radius: 2;
+    -fx-background-radius: 2;
+}
+.check-box:selected .mark {
+    -fx-background-color: -palette-blood;
+}
+
+/* ---------- Action panel (encadré rouge sang) ---------- */
 .action-panel {
-    -fx-border-color: rgba(193, 57, 95, 0.4);
+    -fx-border-color: -palette-blood;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(139,30,30,0.4), 14, 0.3, 0, 4);
 }
 
-/* ----- Alert (dialogues) ----- */
-.dialog-pane {
-    -fx-background-color: #2a2238;
+/* ---------- Chat panel (boisé) ---------- */
+.chat-panel {
+    -fx-border-color: -palette-gold-dark;
+    -fx-border-width: 2;
 }
-.dialog-pane .label, .dialog-pane .header-panel .label {
-    -fx-text-fill: #f0e3ff;
+
+/* ---------- Carte de joueur (style carte à jouer) ---------- */
+.player-card {
+    -fx-background-color:
+        linear-gradient(to bottom, rgba(232,216,176,0.95), rgba(180,150,100,0.95));
+    -fx-background-radius: 6;
+    -fx-border-color: -palette-ink-2;
+    -fx-border-width: 2;
+    -fx-border-radius: 6;
+    -fx-padding: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 8, 0.3, 0, 3);
+}
+.player-card-dead {
+    -fx-opacity: 0.45;
+    -fx-background-color:
+        linear-gradient(to bottom, rgba(120,100,80,0.7), rgba(60,40,30,0.7));
+}
+.player-card-me {
+    -fx-border-color: -palette-gold;
+    -fx-border-width: 3;
+    -fx-effect: dropshadow(gaussian, rgba(201,164,76,0.6), 12, 0.5, 0, 0);
+}
+
+/* ---------- Dialogues (Alert, ChoiceDialog) ---------- */
+.dialog-pane {
+    -fx-background-color: -palette-parchment;
+}
+.dialog-pane .header-panel {
+    -fx-background-color:
+        linear-gradient(to bottom, -palette-ink-2, -palette-ink);
+}
+.dialog-pane .header-panel .label {
+    -fx-text-fill: -palette-gold;
+    -fx-font-family: "Cinzel", "Georgia", serif;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+.dialog-pane .content .label {
+    -fx-text-fill: -palette-ink;
+    -fx-font-family: "IM Fell English", "Georgia", serif;
+    -fx-font-size: 14px;
 }
 .dialog-pane .button {
-    -fx-background-color: linear-gradient(to bottom, #7e4ddb, #5a32a8);
-    -fx-text-fill: white;
-    -fx-background-radius: 6;
+    -fx-background-color: linear-gradient(to bottom, -palette-blood, -palette-blood-dark);
+    -fx-text-fill: -palette-parchment;
+    -fx-font-family: "Cinzel", "Georgia", serif;
+    -fx-font-weight: bold;
+    -fx-background-radius: 3;
+    -fx-padding: 8 18 8 18;
+    -fx-border-color: -palette-gold-dark;
+    -fx-border-width: 1;
+}
+
+/* ---------- Lune décorative (SVG / Region) ---------- */
+.moon {
+    -fx-background-color: radial-gradient(center 35% 35%, radius 60%,
+        #fffae0 0%, #e8d8b0 40%, #c9a44c 100%);
+    -fx-background-radius: 50%;
+    -fx-effect: dropshadow(gaussian, rgba(255,250,224,0.7), 30, 0.6, 0, 0);
+    -fx-pref-width: 80;
+    -fx-pref-height: 80;
+    -fx-min-width: 80;
+    -fx-min-height: 80;
+}
+
+/* ---------- Lanterne décorative ---------- */
+.lantern-glow {
+    -fx-background-color: radial-gradient(center 50% 50%, radius 60%,
+        rgba(255,180,80,0.5) 0%, transparent 100%);
+    -fx-pref-width: 200;
+    -fx-pref-height: 200;
+}
+
+/* ---------- Séparateur orné ---------- */
+.ornament {
+    -fx-text-fill: -palette-gold-dark;
+    -fx-font-size: 18px;
 }

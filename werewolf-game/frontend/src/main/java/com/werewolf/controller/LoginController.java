@@ -4,11 +4,15 @@ import com.werewolf.Router;
 import com.werewolf.service.AuthService;
 import com.werewolf.service.GameService;
 import com.werewolf.service.Session;
+import javafx.animation.Interpolator;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.Region;
+import javafx.util.Duration;
 
 import java.util.List;
 
@@ -25,6 +29,7 @@ public class LoginController {
     @FXML private Button        loginBtn;
     @FXML private Button        registerBtn;
     @FXML private Label         errorLabel;
+    @FXML private Region        moonDeco;
 
     private final AuthService auth = new AuthService();
     private final GameService svc  = new GameService();
@@ -32,7 +37,18 @@ public class LoginController {
     @FXML
     public void initialize() {
         avatarCombo.setItems(FXCollections.observableArrayList(AVATARS));
-        avatarCombo.setValue("👤");
+        avatarCombo.setValue("🌕");
+
+        // Petite animation de "respiration" sur la lune
+        if (moonDeco != null) {
+            TranslateTransition tt = new TranslateTransition(Duration.seconds(4), moonDeco);
+            tt.setFromY(0);
+            tt.setToY(-12);
+            tt.setAutoReverse(true);
+            tt.setCycleCount(TranslateTransition.INDEFINITE);
+            tt.setInterpolator(Interpolator.EASE_BOTH);
+            tt.play();
+        }
     }
 
     @FXML private void onLogin()    { run(false); }

@@ -9,8 +9,10 @@
 
     <top>
         <HBox alignment="CENTER_LEFT" spacing="14" styleClass="topbar">
-            <padding><Insets top="16" right="20" bottom="16" left="20"/></padding>
-            <Label text="📜 Historique &amp; Classement" styleClass="title-l"/>
+            <padding><Insets top="18" right="24" bottom="18" left="24"/></padding>
+            <Label text="📜 Le Grimoire" styleClass="title-l"/>
+            <Label text="•" styleClass="ornament"/>
+            <Label text="Histoires et Légendes" styleClass="subtitle"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Label fx:id="myStatsLabel" styleClass="muted"/>
             <Button fx:id="backBtn" text="← Retour" onAction="#onBack" styleClass="btn-ghost"/>
@@ -18,18 +20,20 @@
     </top>
 
     <center>
-        <HBox spacing="20">
-            <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+        <HBox spacing="22">
+            <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
 
-            <VBox spacing="10" HBox.hgrow="ALWAYS" styleClass="card">
-                <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
-                <Label text="Vos 50 dernières parties" styleClass="title-m"/>
+            <VBox spacing="12" HBox.hgrow="ALWAYS" styleClass="card">
+                <padding><Insets top="22" right="22" bottom="22" left="22"/></padding>
+                <Label text="⚔  Vos batailles passées" styleClass="title-m"/>
+                <Label text="50 dernières chroniques" styleClass="subtitle"/>
                 <ListView fx:id="historyList" VBox.vgrow="ALWAYS" styleClass="dark-list logs"/>
             </VBox>
 
-            <VBox spacing="10" prefWidth="420" styleClass="card">
-                <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
-                <Label text="🏆 Top 50 ELO" styleClass="title-m"/>
+            <VBox spacing="12" prefWidth="460" styleClass="card">
+                <padding><Insets top="22" right="22" bottom="22" left="22"/></padding>
+                <Label text="🏆  Les Légendes" styleClass="title-m"/>
+                <Label text="Classement par ELO" styleClass="subtitle"/>
                 <ListView fx:id="leaderboardList" VBox.vgrow="ALWAYS" styleClass="dark-list logs"/>
             </VBox>
         </HBox>

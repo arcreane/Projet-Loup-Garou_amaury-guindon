@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -9,21 +10,33 @@
 
     <top>
         <HBox alignment="CENTER_LEFT" spacing="14" styleClass="topbar">
-            <padding><Insets top="16" right="20" bottom="16" left="20"/></padding>
+            <padding><Insets top="18" right="24" bottom="18" left="24"/></padding>
             <Label fx:id="gameLabel" styleClass="title-l"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Button fx:id="leaveBtn" text="Quitter" onAction="#onLeave" styleClass="btn-ghost"/>
+            <Button fx:id="leaveBtn" text="← Quitter" onAction="#onLeave" styleClass="btn-ghost"/>
         </HBox>
     </top>
 
     <center>
-        <VBox alignment="CENTER" spacing="20" maxWidth="600" styleClass="card">
-            <padding><Insets top="30" right="40" bottom="30" left="40"/></padding>
-            <Label text="🌒 En attente des joueurs..." styleClass="title-m"/>
-            <ListView fx:id="playerList" prefHeight="320" styleClass="dark-list"/>
-            <Button fx:id="startBtn" text="Démarrer la partie" onAction="#onStart"
-                    styleClass="btn-primary" maxWidth="Infinity"/>
-            <Label fx:id="errorLabel" styleClass="error"/>
-        </VBox>
+        <StackPane>
+            <padding><Insets top="40" right="40" bottom="40" left="40"/></padding>
+
+            <!-- Lueur de feu de camp en fond -->
+            <Region styleClass="lantern-glow" StackPane.alignment="CENTER"/>
+
+            <VBox alignment="CENTER" spacing="20" maxWidth="640" styleClass="card">
+                <padding><Insets top="32" right="44" bottom="32" left="44"/></padding>
+
+                <Label text="🔥  Autour du feu" styleClass="title-l"/>
+                <Label text="Les villageois se rassemblent..." styleClass="subtitle"/>
+                <Label text="✦  ✦  ✦" styleClass="ornament"/>
+
+                <ListView fx:id="playerList" prefHeight="320" styleClass="dark-list"/>
+
+                <Button fx:id="startBtn" text="⚔ Démarrer la partie" onAction="#onStart"
+                        styleClass="btn-primary" maxWidth="Infinity"/>
+                <Label fx:id="errorLabel" styleClass="error"/>
+            </VBox>
+        </StackPane>
     </center>
 </BorderPane>

@@ -1,26 +1,21 @@
 package com.werewolf;
 
+import com.werewolf.service.FontLoader;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-/**
- * Point d'entrée JavaFX. Charge l'écran de connexion.
- * Le {@link Router} gère ensuite la navigation entre écrans.
- */
 public class Main extends Application {
 
     private static Stage primary;
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
+        FontLoader.loadAll();
         primary = stage;
-        stage.setTitle("Loup-Garou Online");
+        stage.setTitle("🌕 Loup-Garou");
         Router.go("login.fxml");
-        stage.setMinWidth(900);
-        stage.setMinHeight(640);
+        stage.setMinWidth(1024);
+        stage.setMinHeight(720);
         stage.show();
     }
 
