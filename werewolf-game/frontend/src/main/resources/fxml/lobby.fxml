@@ -18,6 +18,8 @@
             <Region HBox.hgrow="ALWAYS"/>
             <Label fx:id="eloLabel" styleClass="badge badge-ranked"/>
             <Label fx:id="welcomeLabel" styleClass="muted"/>
+            <Button fx:id="invitationsBtn" text="📨 Invitations" onAction="#onInvitations" styleClass="btn-ghost"/>
+            <Button fx:id="profileBtn" text="✦ Profil" onAction="#onProfile" styleClass="btn-ghost"/>
             <Button fx:id="historyBtn" text="📜 Annales" onAction="#onHistory" styleClass="btn-ghost"/>
         </HBox>
     </top>

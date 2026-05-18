@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Player {
     public int id;
     public String pseudo;
+    public String discriminator;
     @JsonProperty("avatar_url")
     public String avatarUrl;
     public Integer elo;
@@ -25,10 +26,14 @@ public class Player {
     public Role roleEnum() { return Role.parse(role); }
     public String avatar() { return avatarUrl == null || avatarUrl.isEmpty() ? "👤" : avatarUrl; }
 
+    public String fullTag() {
+        return pseudo + (discriminator != null ? "#" + discriminator : "");
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(avatar()).append(' ').append(pseudo);
+        sb.append(avatar()).append(' ').append(fullTag());
         if (elo != null) sb.append("  (").append(elo).append(')');
         if (!alive()) sb.append(" ☠");
         if (host())   sb.append(" 👑");

@@ -58,10 +58,13 @@ function current_player(): ?array {
     $h = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
     if (!preg_match('/Bearer\s+(.+)/i', $h, $m)) return null;
     $token = trim($m[1]);
-    $stmt = db()->prepare('SELECT id, pseudo, email, avatar_url FROM players WHERE token = ?');
+    $stmt = db()->prepare('SELECT id, pseudo, discriminator, email, avatar_url FROM players WHERE token = ?');
     $stmt->execute([$token]);
     $row = $stmt->fetch();
-    return $row ?: null;
+    if (!$row) return null;
+    // Rafraîchit le heartbeat pour le statut "en ligne"
+    db()->prepare('UPDATE players SET last_seen = CURRENT_TIMESTAMP WHERE id = ?')->execute([$row['id']]);
+    return $row;
 }
 
 function require_auth(): array {

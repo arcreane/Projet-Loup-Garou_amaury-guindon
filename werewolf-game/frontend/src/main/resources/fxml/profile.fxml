@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.werewolf.controller.ProfileController"
+            fx:id="rootPane"
+            styleClass="root-bg">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="14" styleClass="topbar">
+            <padding><Insets top="18" right="24" bottom="18" left="24"/></padding>
+            <Label text="✦ Votre Sceau" styleClass="title-l"/>
+            <Label text="•" styleClass="ornament"/>
+            <Label text="Profil et Compagnons" styleClass="subtitle"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="myTagLabel" styleClass="badge"/>
+            <Button text="← Retour" onAction="#onBack" styleClass="btn-ghost"/>
+        </HBox>
+    </top>
+
+    <center>
+        <HBox spacing="20">
+            <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+            <!-- ============ PROFIL ============ -->
+            <VBox spacing="14" prefWidth="360" maxHeight="-Infinity" alignment="TOP_LEFT" styleClass="card">
+                <padding><Insets top="22" right="22" bottom="22" left="22"/></padding>
+                <Label text="✦ Modifier le profil" styleClass="title-m"/>
+
+                <Label text="Sceau (avatar) :" styleClass="muted"/>
+                <ComboBox fx:id="avatarCombo" maxWidth="Infinity" styleClass="dark-combo"/>
+                <Button text="Mettre à jour le sceau" onAction="#onUpdateAvatar" styleClass="btn-primary" maxWidth="Infinity"/>
+
+                <Separator/>
+
+                <Label text="Email :" styleClass="muted"/>
+                <TextField fx:id="emailField" styleClass="input"/>
+                <Button text="Mettre à jour l'email" onAction="#onUpdateEmail" styleClass="btn-primary" maxWidth="Infinity"/>
+
+                <Separator/>
+
+                <Label text="Mot de passe :" styleClass="muted"/>
+                <PasswordField fx:id="oldPwdField" promptText="Ancien mot de passe" styleClass="input"/>
+                <PasswordField fx:id="newPwdField" promptText="Nouveau mot de passe" styleClass="input"/>
+                <PasswordField fx:id="newPwdConfirmField" promptText="Confirmer" styleClass="input"/>
+                <Button text="Changer le mot de passe" onAction="#onUpdatePassword" styleClass="btn-primary" maxWidth="Infinity"/>
+
+                <Label fx:id="profileMsgLabel" wrapText="true" styleClass="muted"/>
+            </VBox>
+
+            <!-- ============ AMIS ============ -->
+            <VBox spacing="12" HBox.hgrow="ALWAYS" styleClass="card">
+                <padding><Insets top="22" right="22" bottom="22" left="22"/></padding>
+                <Label text="🤝 Compagnons" styleClass="title-m"/>
+
+                <!-- Ajouter -->
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <TextField fx:id="addFriendField" promptText="pseudo#1234" HBox.hgrow="ALWAYS" styleClass="input"/>
+                    <Button text="Envoyer demande" onAction="#onSendRequest" styleClass="btn-primary"/>
+                </HBox>
+                <Label fx:id="addFriendMsgLabel" styleClass="muted"/>
+
+                <Separator/>
+
+                <TabPane VBox.vgrow="ALWAYS" tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                        <Tab text="Amis">
+                            <content>
+                                <VBox spacing="6">
+                                    <padding><Insets top="10"/></padding>
+                                    <ListView fx:id="friendsList" VBox.vgrow="ALWAYS" styleClass="dark-list"/>
+                                    <HBox spacing="8">
+                                        <Button text="Inviter dans ma partie" onAction="#onInviteFriend" styleClass="btn-primary"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Button text="Retirer" onAction="#onRemoveFriend" styleClass="btn-danger"/>
+                                    </HBox>
+                                </VBox>
+                            </content>
+                        </Tab>
+                        <Tab fx:id="receivedTab" text="Demandes reçues">
+                            <content>
+                                <VBox spacing="6">
+                                    <padding><Insets top="10"/></padding>
+                                    <ListView fx:id="receivedList" VBox.vgrow="ALWAYS" styleClass="dark-list"/>
+                                    <HBox spacing="8">
+                                        <Button text="Accepter" onAction="#onAcceptRequest" styleClass="btn-primary"/>
+                                        <Button text="Refuser" onAction="#onDeclineRequest" styleClass="btn-danger"/>
+                                    </HBox>
+                                </VBox>
+                            </content>
+                        </Tab>
+                        <Tab text="Demandes envoyées">
+                            <content>
+                                <VBox spacing="6">
+                                    <padding><Insets top="10"/></padding>
+                                    <ListView fx:id="sentList" VBox.vgrow="ALWAYS" styleClass="dark-list"/>
+                                </VBox>
+                            </content>
+                        </Tab>
+                    </tabs>
+                </TabPane>
+            </VBox>
+        </HBox>
+    </center>
+</BorderPane>

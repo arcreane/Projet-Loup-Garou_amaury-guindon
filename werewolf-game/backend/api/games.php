@@ -30,6 +30,7 @@ function handle_create_game(): void {
         $sid = (int)$pdo->lastInsertId();
         $pdo->prepare('INSERT INTO session_players(session_id, player_id, is_host) VALUES (?,?,1)')
             ->execute([$sid, $me['id']]);
+        $pdo->prepare('UPDATE players SET current_session_id = ? WHERE id = ?')->execute([$sid, $me['id']]);
         game_log($sid, $me['pseudo'] . ' a créé la partie' . ($ranked ? ' (classée)' : '') . '.');
         $pdo->commit();
         json_response(['session_id' => $sid]);
@@ -52,13 +53,15 @@ function handle_join(int $sid): void {
             ->execute([$sid, $me['id']]);
         game_log($sid, $me['pseudo'] . ' a rejoint la partie.');
     } catch (PDOException $e) { /* déjà dedans */ }
+    // Met à jour le statut "en partie"
+    db()->prepare('UPDATE players SET current_session_id = ? WHERE id = ?')->execute([$sid, $me['id']]);
     json_response(['ok' => true]);
 }
 
 function handle_players(int $sid): void {
     $me = current_player();
     $stmt = db()->prepare(
-        "SELECT p.id, p.pseudo, p.avatar_url, p.elo, sp.is_alive, sp.is_host, sp.role
+        "SELECT p.id, p.pseudo, p.discriminator, p.avatar_url, p.elo, sp.is_alive, sp.is_host, sp.role
          FROM session_players sp
          JOIN players p ON p.id = sp.player_id
          WHERE sp.session_id = ?
@@ -93,7 +96,7 @@ function handle_state(int $sid): void {
     if (!$session) json_error('Partie introuvable', 404);
 
     $stmt = db()->prepare(
-        "SELECT p.id, p.pseudo, p.avatar_url, p.elo, sp.is_alive, sp.is_host, sp.role, sp.elo_before, sp.elo_after
+        "SELECT p.id, p.pseudo, p.discriminator, p.avatar_url, p.elo, sp.is_alive, sp.is_host, sp.role, sp.elo_before, sp.elo_after
          FROM session_players sp JOIN players p ON p.id = sp.player_id
          WHERE sp.session_id = ? ORDER BY sp.joined_at"
     );
@@ -405,7 +408,7 @@ function handle_leaderboard(): void {
 
 function handle_me(): void {
     $me = require_auth();
-    $stmt = db()->prepare('SELECT id, pseudo, email, avatar_url, elo, games_played, games_won FROM players WHERE id=?');
+    $stmt = db()->prepare('SELECT id, pseudo, discriminator, email, avatar_url, elo, games_played, games_won FROM players WHERE id=?');
     $stmt->execute([$me['id']]);
     json_response($stmt->fetch());
 }

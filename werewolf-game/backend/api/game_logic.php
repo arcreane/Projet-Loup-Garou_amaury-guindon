@@ -227,6 +227,9 @@ function check_end(int $sid): bool {
 function end_game(int $sid, string $winner): void {
     db()->prepare("UPDATE game_sessions SET status='ENDED', phase='ENDED', winner_team=?, ended_at=CURRENT_TIMESTAMP WHERE id=?")
         ->execute([$winner, $sid]);
+    // Libère le statut "en partie" de tous les joueurs
+    db()->prepare("UPDATE players SET current_session_id = NULL WHERE current_session_id = ?")
+        ->execute([$sid]);
     $msg = ($winner === 'VILLAGERS')
         ? 'Les Villageois ont gagné ! Le village est sauvé.'
         : 'Les Loups-Garous ont gagné ! Le village est dévoré.';

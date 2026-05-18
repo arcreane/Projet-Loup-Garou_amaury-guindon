@@ -1,6 +1,6 @@
 -- =====================================================
--- Werewolf Multiplayer Game - Database Schema (v2)
--- MySQL 5.7+ / 8.0+ - inclut ELO, ranked, chat, historique
+-- Werewolf Multiplayer Game - Database Schema (v3)
+-- MySQL 5.7+ / 8.0+
 -- =====================================================
 
 DROP DATABASE IF EXISTS werewolf;
@@ -11,16 +11,20 @@ USE werewolf;
 -- PLAYERS
 -- =====================================================
 CREATE TABLE players (
-    id              INT AUTO_INCREMENT PRIMARY KEY,
-    pseudo          VARCHAR(50)  NOT NULL UNIQUE,
-    email           VARCHAR(120) NOT NULL UNIQUE,
-    password_hash   VARCHAR(255) NOT NULL,
-    avatar_url      VARCHAR(255) DEFAULT NULL,
-    elo             INT NOT NULL DEFAULT 1000,
-    games_played    INT NOT NULL DEFAULT 0,
-    games_won       INT NOT NULL DEFAULT 0,
-    token           VARCHAR(64)  DEFAULT NULL,
-    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    id                 INT AUTO_INCREMENT PRIMARY KEY,
+    pseudo             VARCHAR(50)  NOT NULL,
+    discriminator      CHAR(4)      NOT NULL,
+    email              VARCHAR(120) NOT NULL UNIQUE,
+    password_hash      VARCHAR(255) NOT NULL,
+    avatar_url         VARCHAR(255) DEFAULT NULL,
+    elo                INT NOT NULL DEFAULT 1000,
+    games_played       INT NOT NULL DEFAULT 0,
+    games_won          INT NOT NULL DEFAULT 0,
+    token              VARCHAR(64)  DEFAULT NULL,
+    last_seen          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    current_session_id INT DEFAULT NULL,
+    created_at         TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_pseudo_disc (pseudo, discriminator),
     INDEX idx_token (token),
     INDEX idx_elo   (elo)
 ) ENGINE=InnoDB;
@@ -29,18 +33,18 @@ CREATE TABLE players (
 -- GAME SESSIONS
 -- =====================================================
 CREATE TABLE game_sessions (
-    id               INT AUTO_INCREMENT PRIMARY KEY,
-    name             VARCHAR(80) NOT NULL DEFAULT 'Partie sans nom',
-    is_ranked        TINYINT(1)  NOT NULL DEFAULT 0,
-    status           ENUM('WAITING','NIGHT','DAY','ENDED') NOT NULL DEFAULT 'WAITING',
-    phase            VARCHAR(40)  DEFAULT NULL,
-    round            INT NOT NULL DEFAULT 0,
-    phase_started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    phase_duration   INT NOT NULL DEFAULT 60,
-    winner_team      ENUM('VILLAGERS','WEREWOLVES') DEFAULT NULL,
+    id                INT AUTO_INCREMENT PRIMARY KEY,
+    name              VARCHAR(80) NOT NULL DEFAULT 'Partie sans nom',
+    is_ranked         TINYINT(1)  NOT NULL DEFAULT 0,
+    status            ENUM('WAITING','NIGHT','DAY','ENDED') NOT NULL DEFAULT 'WAITING',
+    phase             VARCHAR(40)  DEFAULT NULL,
+    round             INT NOT NULL DEFAULT 0,
+    phase_started_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    phase_duration    INT NOT NULL DEFAULT 60,
+    winner_team       ENUM('VILLAGERS','WEREWOLVES') DEFAULT NULL,
     pending_hunter_id INT DEFAULT NULL,
-    created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    ended_at         TIMESTAMP NULL DEFAULT NULL,
+    created_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ended_at          TIMESTAMP NULL DEFAULT NULL,
     INDEX idx_status (status)
 ) ENGINE=InnoDB;
 
@@ -67,13 +71,13 @@ CREATE TABLE session_players (
 -- VOTES
 -- =====================================================
 CREATE TABLE votes (
-    id              INT AUTO_INCREMENT PRIMARY KEY,
-    session_id      INT NOT NULL,
-    voter_id        INT NOT NULL,
-    target_id       INT NOT NULL,
-    phase           VARCHAR(40) NOT NULL,
-    round           INT NOT NULL,
-    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    id         INT AUTO_INCREMENT PRIMARY KEY,
+    session_id INT NOT NULL,
+    voter_id   INT NOT NULL,
+    target_id  INT NOT NULL,
+    phase      VARCHAR(40) NOT NULL,
+    round      INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY uq_vote (session_id, voter_id, phase, round),
     FOREIGN KEY (session_id) REFERENCES game_sessions(id) ON DELETE CASCADE,
     FOREIGN KEY (voter_id)   REFERENCES players(id)       ON DELETE CASCADE,
@@ -84,13 +88,13 @@ CREATE TABLE votes (
 -- ACTIONS DE NUIT
 -- =====================================================
 CREATE TABLE night_actions (
-    id              INT AUTO_INCREMENT PRIMARY KEY,
-    session_id      INT NOT NULL,
-    player_id       INT NOT NULL,
-    action_type     ENUM('SEER_REVEAL','WITCH_HEAL','WITCH_KILL','HUNTER_SHOT') NOT NULL,
-    target_id       INT DEFAULT NULL,
-    round           INT NOT NULL,
-    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    session_id  INT NOT NULL,
+    player_id   INT NOT NULL,
+    action_type ENUM('SEER_REVEAL','WITCH_HEAL','WITCH_KILL','HUNTER_SHOT') NOT NULL,
+    target_id   INT DEFAULT NULL,
+    round       INT NOT NULL,
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (session_id) REFERENCES game_sessions(id) ON DELETE CASCADE,
     FOREIGN KEY (player_id)  REFERENCES players(id)       ON DELETE CASCADE
 ) ENGINE=InnoDB;
@@ -122,4 +126,35 @@ CREATE TABLE chat_messages (
     FOREIGN KEY (session_id) REFERENCES game_sessions(id) ON DELETE CASCADE,
     FOREIGN KEY (player_id)  REFERENCES players(id)       ON DELETE CASCADE,
     INDEX idx_session_created (session_id, created_at)
+) ENGINE=InnoDB;
+
+-- =====================================================
+-- AMITIÉS (relation symétrique stockée une fois)
+-- =====================================================
+CREATE TABLE friendships (
+    requester_id INT NOT NULL,
+    addressee_id INT NOT NULL,
+    status       ENUM('PENDING','ACCEPTED') NOT NULL DEFAULT 'PENDING',
+    created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (requester_id, addressee_id),
+    FOREIGN KEY (requester_id) REFERENCES players(id) ON DELETE CASCADE,
+    FOREIGN KEY (addressee_id) REFERENCES players(id) ON DELETE CASCADE,
+    INDEX idx_addressee_status (addressee_id, status)
+) ENGINE=InnoDB;
+
+-- =====================================================
+-- INVITATIONS EN PARTIE
+-- =====================================================
+CREATE TABLE game_invitations (
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    from_id     INT NOT NULL,
+    to_id       INT NOT NULL,
+    session_id  INT NOT NULL,
+    status      ENUM('PENDING','ACCEPTED','DECLINED','EXPIRED') NOT NULL DEFAULT 'PENDING',
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (from_id)    REFERENCES players(id)       ON DELETE CASCADE,
+    FOREIGN KEY (to_id)      REFERENCES players(id)       ON DELETE CASCADE,
+    FOREIGN KEY (session_id) REFERENCES game_sessions(id) ON DELETE CASCADE,
+    INDEX idx_to_status (to_id, status)
 ) ENGINE=InnoDB;

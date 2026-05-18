@@ -14,8 +14,23 @@ if ($path === 'login'    && $verb === 'POST') { require __DIR__ . '/auth.php';  
 if ($path === 'register' && $verb === 'POST') { require __DIR__ . '/auth.php';     handle_register(); }
 
 // --- Profil / Avatar ---
-if ($path === 'me'                && $verb === 'GET')  { require __DIR__ . '/games.php'; handle_me();            }
-if ($path === 'me/avatar'         && $verb === 'POST') { require __DIR__ . '/games.php'; handle_update_avatar(); }
+if ($path === 'me'              && $verb === 'GET')  { require __DIR__ . '/games.php';  handle_me();              }
+if ($path === 'me/avatar'       && $verb === 'POST') { require __DIR__ . '/games.php';  handle_update_avatar();   }
+if ($path === 'me/email'        && $verb === 'POST') { require __DIR__ . '/social.php'; handle_update_email();    }
+if ($path === 'me/password'     && $verb === 'POST') { require __DIR__ . '/social.php'; handle_update_password(); }
+
+// --- Amis ---
+if ($path === 'friends'         && $verb === 'GET')  { require __DIR__ . '/social.php'; handle_list_friends();    }
+if ($path === 'friends/request' && $verb === 'POST') { require __DIR__ . '/social.php'; handle_friend_request();  }
+if ($path === 'friends/accept'  && $verb === 'POST') { require __DIR__ . '/social.php'; handle_friend_accept();   }
+if ($path === 'friends/decline' && $verb === 'POST') { require __DIR__ . '/social.php'; handle_friend_decline();  }
+if ($path === 'friends/remove'  && $verb === 'POST') { require __DIR__ . '/social.php'; handle_friend_remove();   }
+
+// --- Invitations en partie ---
+if ($path === 'invitations'         && $verb === 'GET')  { require __DIR__ . '/social.php'; handle_invite_list();    }
+if ($path === 'invitations/send'    && $verb === 'POST') { require __DIR__ . '/social.php'; handle_invite_send();    }
+if ($path === 'invitations/accept'  && $verb === 'POST') { require __DIR__ . '/social.php'; handle_invite_accept();  }
+if ($path === 'invitations/decline' && $verb === 'POST') { require __DIR__ . '/social.php'; handle_invite_decline(); }
 
 // --- Historique / Classement ---
 if ($path === 'history'      && $verb === 'GET') { require __DIR__ . '/games.php'; handle_history();     }
