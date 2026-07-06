@@ -17,7 +17,8 @@ if (!defined('DB_PASS')) define('DB_PASS', '');
 
 // --- Clé API Gemini (chat IA des bots). Vide = bots utilisent les phrases pré-écrites ---
 if (!defined('GEMINI_API_KEY')) define('GEMINI_API_KEY', '');
-if (!defined('GEMINI_MODEL'))   define('GEMINI_MODEL', 'gemini-1.5-flash-latest');
+// gemini-2.5-flash-lite : au tier gratuit, sans "thinking" (réponse directe, latence minimale)
+if (!defined('GEMINI_MODEL'))   define('GEMINI_MODEL', 'gemini-2.5-flash-lite');
 
 // CORS minimal pour autoriser l'appel depuis JavaFX (HttpClient)
 header('Access-Control-Allow-Origin: *');

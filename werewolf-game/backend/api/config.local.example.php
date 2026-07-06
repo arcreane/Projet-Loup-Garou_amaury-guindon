@@ -11,12 +11,12 @@
 // 1. Va sur https://aistudio.google.com/apikey
 // 2. Connecte-toi avec un compte Google
 // 3. Clique "Create API key" (gratuit, sans carte bancaire)
-// 4. Copie la clé (commence par "AIza...")
+// 4. Copie la clé (commence par "AIza..." ou "AQ....")
 //
 // Tier gratuit : 60 req/min, 1500 req/jour. Largement suffisant.
 
 define('GEMINI_API_KEY', 'AIza...COLLE_TA_CLE_ICI');
-// define('GEMINI_MODEL', 'gemini-1.5-flash-latest');  // optionnel
+// define('GEMINI_MODEL', 'gemini-2.5-flash-lite');  // optionnel
 
 // Tu peux aussi surcharger les params DB si différents :
 // define('DB_HOST', '127.0.0.1:3306');

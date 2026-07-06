@@ -73,7 +73,8 @@ function bot_act(int $sid, array $bot, string $phase, int $round): void {
         case 'NIGHT_WITCH':
             if ($role !== 'WITCH') return;
             if (bot_has_night_action($sid, $bid, 'WITCH_HEAL', $round) ||
-                bot_has_night_action($sid, $bid, 'WITCH_KILL', $round)) return;
+                bot_has_night_action($sid, $bid, 'WITCH_KILL', $round) ||
+                bot_has_night_action($sid, $bid, 'WITCH_PASS', $round)) return;
 
             // Probabilité de soigner si on a la potion : 50%, sinon pass
             $healAvailable = !((int)$bot['witch_heal_used']);
@@ -94,9 +95,9 @@ function bot_act(int $sid, array $bot, string $phase, int $round): void {
                         ->execute([$sid, $bid]);
                 }
             } else {
-                // Pass : on insère un faux WITCH_HEAL juste pour marquer "j'ai joué"
+                // Pass : marqueur dédié (un faux WITCH_HEAL annulerait l'attaque des loups)
                 db()->prepare('INSERT INTO night_actions(session_id,player_id,action_type,round) VALUES (?,?,?,?)')
-                    ->execute([$sid, $bid, 'WITCH_HEAL', $round]);
+                    ->execute([$sid, $bid, 'WITCH_PASS', $round]);
             }
             break;
 

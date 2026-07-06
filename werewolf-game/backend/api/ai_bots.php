@@ -54,7 +54,7 @@ function ai_enabled(): bool {
  * nuit, ALL sinon.
  */
 function ai_generate_chat(int $sid, int $botId, string $pseudo, ?string $role, string $eventType, array $payload): void {
-    $prompt = ai_build_prompt($sid, $pseudo, $role, $eventType, $payload);
+    $prompt = ai_build_prompt($sid, $botId, $pseudo, $role, $eventType, $payload);
     $msg = ai_call_gemini($prompt);
     if (!$msg) return;
 
@@ -74,7 +74,25 @@ function ai_generate_chat(int $sid, int $botId, string $pseudo, ?string $role, s
         ->execute([$sid, $botId, $msg, $scope]);
 }
 
-function ai_build_prompt(int $sid, string $pseudo, ?string $role, string $eventType, array $payload): string {
+/**
+ * Personnalité stable par bot (déterministe sur l'id) : chaque bot garde
+ * le même caractère toute la partie, ce qui rend les dialogues cohérents.
+ */
+function ai_personality(int $botId): string {
+    $personalities = [
+        "AGRESSIF : tu accuses vite et fort, tu cherches un coupable à chaque tour.",
+        "PEUREUX : tu paniques facilement, tu supplies qu'on ne te vote pas, tu doutes de tout.",
+        "ANALYTIQUE : tu raisonnes froidement, tu cites les votes et les faits, ton calme est suspect.",
+        "BLAGUEUR : tu plaisantes même dans les pires moments, humour noir de village.",
+        "SILENCIEUX : tu parles peu, phrases très courtes, presque des grognements.",
+        "PARANOÏAQUE : tu es persuadé que tout le monde ment, tu vois des complots partout.",
+        "THÉÂTRAL : tu parles comme dans une pièce de théâtre, dramatique et grandiloquent.",
+        "MÉFIANT ANCIEN : tu parles comme un vieux du village, proverbes et sagesse rustique.",
+    ];
+    return $personalities[$botId % count($personalities)];
+}
+
+function ai_build_prompt(int $sid, int $botId, string $pseudo, ?string $role, string $eventType, array $payload): string {
     // Joueurs vivants
     $alive = db()->prepare(
         "SELECT p.pseudo FROM session_players sp JOIN players p ON p.id = sp.player_id
@@ -111,8 +129,11 @@ function ai_build_prompt(int $sid, string $pseudo, ?string $role, string $eventT
 
     $roleLabel = ai_role_label($role);
 
+    $personality = ai_personality($botId);
+
     return "Tu joues à une partie de Loup-Garou (en français). Tu es \"{$pseudo}\".\n"
         . "TON RÔLE SECRET : {$roleLabel}.\n"
+        . "TON CARACTÈRE (garde-le à chaque message) : {$personality}\n"
         . "Tour : {$s['round']}, phase : {$s['phase']}, statut : {$s['status']}.\n"
         . "Joueurs encore en vie : {$aliveNames}.\n"
         . "\n"
@@ -131,12 +152,13 @@ function ai_build_prompt(int $sid, string $pseudo, ?string $role, string $eventT
 
 function ai_role_label(?string $r): string {
     switch ($r) {
-        case 'WEREWOLF': return 'Loup-Garou (tu veux dévorer le village SANS te faire démasquer)';
-        case 'SEER':     return 'Voyante (tu connais le rôle d\'un joueur, à utiliser stratégiquement)';
-        case 'WITCH':    return 'Sorcière (potions de vie et de mort, à utiliser sagement)';
-        case 'HUNTER':   return 'Chasseur (tu tireras une dernière flèche à ta mort)';
-        case 'VILLAGER': return 'simple Villageois (tu dois trouver les loups par déduction)';
-        default:         return 'inconnu';
+        case 'WEREWOLF':    return 'Loup-Garou (tu veux dévorer le village SANS te faire démasquer)';
+        case 'SEER':        return 'Voyante (tu connais le rôle d\'un joueur, à utiliser stratégiquement)';
+        case 'WITCH':       return 'Sorcière (potions de vie et de mort, à utiliser sagement)';
+        case 'HUNTER':      return 'Chasseur (tu tireras une dernière flèche à ta mort)';
+        case 'LITTLE_GIRL': return 'Petite Fille (tu espionnes les loups la nuit, sans jamais révéler comment tu sais)';
+        case 'VILLAGER':    return 'simple Villageois (tu dois trouver les loups par déduction)';
+        default:            return 'inconnu';
     }
 }
 
@@ -178,7 +200,7 @@ function ai_call_gemini(string $prompt): ?string {
         'contents' => [['parts' => [['text' => $prompt]]]],
         'generationConfig' => [
             'temperature'     => 0.95,
-            'maxOutputTokens' => 80,
+            'maxOutputTokens' => 256,  // marge pour les modèles "thinking" dont la réflexion compte dans le budget
             'topP'            => 0.95,
         ],
         'safetySettings' => [

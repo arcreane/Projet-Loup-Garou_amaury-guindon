@@ -11,6 +11,7 @@ function assign_roles(int $sid, array $playerIds): void {
     for ($i = 0; $i < $w; $i++) $roles[] = 'WEREWOLF';
     if ($n >= 4) $roles[] = 'SEER';
     if ($n >= 5) $roles[] = 'WITCH';
+    if ($n >= 6) $roles[] = 'LITTLE_GIRL';
     if ($n >= 7) $roles[] = 'HUNTER';
     while (count($roles) < $n) $roles[] = 'VILLAGER';
     shuffle($roles);
@@ -19,6 +20,21 @@ function assign_roles(int $sid, array $playerIds): void {
     foreach ($playerIds as $i => $pid) {
         $stmt->execute([$roles[$i], $sid, $pid]);
     }
+}
+
+/**
+ * Désigne le Capitaine au hasard parmi les joueurs (règle simplifiée :
+ * pas de phase d'élection). Sa voix compte double au vote du village.
+ * Annoncé publiquement au démarrage.
+ */
+function assign_captain(int $sid): void {
+    $s = db()->prepare('SELECT sp.player_id, p.pseudo FROM session_players sp JOIN players p ON p.id = sp.player_id WHERE sp.session_id = ? ORDER BY RAND() LIMIT 1');
+    $s->execute([$sid]);
+    $cap = $s->fetch();
+    if (!$cap) return;
+    db()->prepare('UPDATE session_players SET is_captain = 1 WHERE session_id = ? AND player_id = ?')
+        ->execute([$sid, $cap['player_id']]);
+    game_log($sid, '🎖 ' . $cap['pseudo'] . ' est désigné Capitaine du village : sa voix compte double.');
 }
 
 /** Sauvegarde l'ELO de chaque joueur au début de la partie (pour l'historique). */
@@ -78,7 +94,8 @@ function advance_if_needed(int $sid): void {
             $witch = alive_player_id_by_role($sid, 'WITCH');
             $played = ($witch === null) ||
                       has_night_action($sid, $witch, 'WITCH_HEAL', $round) ||
-                      has_night_action($sid, $witch, 'WITCH_KILL', $round);
+                      has_night_action($sid, $witch, 'WITCH_KILL', $round) ||
+                      has_night_action($sid, $witch, 'WITCH_PASS', $round);
             if ($expired || $played) {
                 resolve_night($sid, $round);
                 if (check_end($sid)) return;
@@ -138,10 +155,14 @@ function has_night_action(int $sid, int $pid, string $type, int $round): bool {
 }
 
 function majority_target(int $sid, string $phase, int $round): ?int {
+    // Au vote du village, la voix du Capitaine compte double
+    $weight = ($phase === 'DAY_VOTE') ? '1 + sp.is_captain' : '1';
     $s = db()->prepare(
-        "SELECT target_id, COUNT(*) c
-         FROM votes WHERE session_id=? AND phase=? AND round=?
-         GROUP BY target_id ORDER BY c DESC"
+        "SELECT v.target_id, SUM($weight) c
+         FROM votes v
+         JOIN session_players sp ON sp.session_id = v.session_id AND sp.player_id = v.voter_id
+         WHERE v.session_id=? AND v.phase=? AND v.round=?
+         GROUP BY v.target_id ORDER BY c DESC"
     );
     $s->execute([$sid, $phase, $round]);
     $rows = $s->fetchAll();
@@ -193,13 +214,25 @@ function resolve_day(int $sid, int $round): void {
  * de chasseur (évite la boucle infinie chasseur tue chasseur).
  */
 function kill_player(int $sid, int $pid, string $reason, bool $allowHunterTrigger = true): void {
-    $st = db()->prepare('SELECT p.pseudo, sp.role, sp.is_alive FROM session_players sp JOIN players p ON p.id=sp.player_id WHERE sp.session_id=? AND sp.player_id=?');
+    $st = db()->prepare('SELECT p.pseudo, sp.role, sp.is_alive, sp.is_captain FROM session_players sp JOIN players p ON p.id=sp.player_id WHERE sp.session_id=? AND sp.player_id=?');
     $st->execute([$sid, $pid]);
     $row = $st->fetch();
     if (!$row || !$row['is_alive']) return;
 
     db()->prepare('UPDATE session_players SET is_alive=0 WHERE session_id=? AND player_id=?')->execute([$sid, $pid]);
     game_log($sid, $row['pseudo'] . ' est mort. ' . $reason . '. Il était ' . role_fr($row['role']) . '.');
+
+    // Le Capitaine mort transmet son écharpe à un survivant
+    if ((int)$row['is_captain'] === 1) {
+        db()->prepare('UPDATE session_players SET is_captain=0 WHERE session_id=? AND player_id=?')->execute([$sid, $pid]);
+        $next = db()->prepare('SELECT sp.player_id, p.pseudo FROM session_players sp JOIN players p ON p.id=sp.player_id WHERE sp.session_id=? AND sp.is_alive=1 ORDER BY RAND() LIMIT 1');
+        $next->execute([$sid]);
+        if ($heir = $next->fetch()) {
+            db()->prepare('UPDATE session_players SET is_captain=1 WHERE session_id=? AND player_id=?')
+                ->execute([$sid, $heir['player_id']]);
+            game_log($sid, '🎖 ' . $row['pseudo'] . ' transmet son écharpe de Capitaine à ' . $heir['pseudo'] . '.');
+        }
+    }
 
     // Réaction IA des bots
     if (file_exists(__DIR__ . '/ai_bots.php')) {

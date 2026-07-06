@@ -61,7 +61,7 @@ function handle_join(int $sid): void {
 function handle_players(int $sid): void {
     $me = current_player();
     $stmt = db()->prepare(
-        "SELECT p.id, p.pseudo, p.discriminator, p.avatar_url, p.elo, sp.is_alive, sp.is_host, sp.role
+        "SELECT p.id, p.pseudo, p.discriminator, p.avatar_url, p.elo, sp.is_alive, sp.is_host, sp.is_captain, sp.role
          FROM session_players sp
          JOIN players p ON p.id = sp.player_id
          WHERE sp.session_id = ?
@@ -77,10 +77,11 @@ function handle_players(int $sid): void {
     foreach ($players as &$p) {
         $reveal = ($status === 'ENDED') || (!$p['is_alive']) || ($me && $p['id'] == $me['id']);
         if (!$reveal) $p['role'] = null;
-        $p['id']       = (int)$p['id'];
-        $p['elo']      = (int)$p['elo'];
-        $p['is_alive'] = (int)$p['is_alive'];
-        $p['is_host']  = (int)$p['is_host'];
+        $p['id']         = (int)$p['id'];
+        $p['elo']        = (int)$p['elo'];
+        $p['is_alive']   = (int)$p['is_alive'];
+        $p['is_host']    = (int)$p['is_host'];
+        $p['is_captain'] = (int)$p['is_captain'];
     }
     json_response(['players' => $players]);
 }
@@ -106,7 +107,7 @@ function handle_state(int $sid): void {
     if (!$session) json_error('Partie introuvable', 404);
 
     $stmt = db()->prepare(
-        "SELECT p.id, p.pseudo, p.discriminator, p.avatar_url, p.elo, sp.is_alive, sp.is_host, sp.role, sp.elo_before, sp.elo_after
+        "SELECT p.id, p.pseudo, p.discriminator, p.avatar_url, p.elo, sp.is_alive, sp.is_host, sp.is_captain, sp.role, sp.elo_before, sp.elo_after
          FROM session_players sp JOIN players p ON p.id = sp.player_id
          WHERE sp.session_id = ? ORDER BY sp.joined_at"
     );
@@ -129,6 +130,7 @@ function handle_state(int $sid): void {
         $p['elo']        = (int)$p['elo'];
         $p['is_alive']   = (int)$p['is_alive'];
         $p['is_host']    = (int)$p['is_host'];
+        $p['is_captain'] = (int)$p['is_captain'];
         $p['elo_before'] = isset($p['elo_before']) ? (int)$p['elo_before'] : null;
         $p['elo_after']  = isset($p['elo_after'])  ? (int)$p['elo_after']  : null;
     }
@@ -147,16 +149,20 @@ function handle_state(int $sid): void {
     $logStmt->execute([$sid, $me['id'], $myRole ?? '']);
     $logs = $logStmt->fetchAll();
 
-    // Chat visible : ALL pour tous + WEREWOLVES uniquement pour loups (vivants OU morts qui étaient loups)
+    // Chat visible : ALL pour tous. Canal WEREWOLVES visible pour :
+    // - les loups, - les morts (spectateurs), - la Petite Fille pendant la nuit (elle espionne)
+    $seesWolfChat = ($myRole === 'WEREWOLF')
+                 || $iAmDead
+                 || ($myRole === 'LITTLE_GIRL' && $session['status'] === 'NIGHT');
     $chatStmt = db()->prepare(
         "SELECT c.id, c.message, c.scope, c.created_at, p.pseudo, p.avatar_url
          FROM chat_messages c JOIN players p ON p.id = c.player_id
          WHERE c.session_id = ?
-           AND ( c.scope = 'ALL' OR (c.scope = 'WEREWOLVES' AND ? = 'WEREWOLF') )
+           AND ( c.scope = 'ALL' OR (c.scope = 'WEREWOLVES' AND 1 = ?) )
          ORDER BY c.created_at ASC, c.id ASC
          LIMIT 200"
     );
-    $chatStmt->execute([$sid, $myRole ?? '']);
+    $chatStmt->execute([$sid, (int)$seesWolfChat]);
     $chat = $chatStmt->fetchAll();
 
     $started   = strtotime($session['phase_started_at']);
@@ -200,6 +206,7 @@ function handle_start(int $sid): void {
     if (count($ids) < 4) json_error('Au moins 4 joueurs requis', 422);
 
     assign_roles($sid, $ids);
+    assign_captain($sid);
     snapshot_elos($sid);
 
     db()->prepare("UPDATE game_sessions
@@ -270,15 +277,25 @@ function handle_votes(int $sid): void {
     $row = $s->fetch();
     if (!$row) json_error('Partie introuvable', 404);
 
+    // La voix du Capitaine compte double au vote du village (comme dans majority_target)
+    $weight = ($row['phase'] === 'DAY_VOTE') ? '1 + sp.is_captain' : '1';
     $v = db()->prepare(
-        "SELECT v.target_id, p.pseudo AS target_pseudo, COUNT(*) AS nb
-         FROM votes v JOIN players p ON p.id = v.target_id
+        "SELECT v.target_id, p.pseudo AS target_pseudo, SUM($weight) AS nb, COUNT(*) AS voters
+         FROM votes v
+         JOIN players p ON p.id = v.target_id
+         JOIN session_players sp ON sp.session_id = v.session_id AND sp.player_id = v.voter_id
          WHERE v.session_id=? AND v.phase=? AND v.round=?
          GROUP BY v.target_id, p.pseudo
          ORDER BY nb DESC"
     );
     $v->execute([$sid, $row['phase'], $row['round']]);
-    json_response(['phase' => $row['phase'], 'round' => (int)$row['round'], 'tally' => $v->fetchAll()]);
+    $tally = $v->fetchAll();
+    foreach ($tally as &$t) {
+        $t['target_id'] = (int)$t['target_id'];
+        $t['nb']        = (int)$t['nb'];
+        $t['voters']    = (int)$t['voters'];
+    }
+    json_response(['phase' => $row['phase'], 'round' => (int)$row['round'], 'tally' => $tally]);
 }
 
 function handle_action(int $sid): void {
@@ -343,7 +360,7 @@ function handle_action(int $sid): void {
         case 'WITCH_PASS':
             if (!$me_sp['is_alive'] || $role !== 'WITCH' || $phase !== 'NIGHT_WITCH') json_error('Action invalide', 409);
             db()->prepare('INSERT INTO night_actions(session_id,player_id,action_type,round) VALUES (?,?,?,?)')
-                ->execute([$sid, $me['id'], 'WITCH_HEAL', $round]);
+                ->execute([$sid, $me['id'], 'WITCH_PASS', $round]);
             advance_if_needed($sid);
             json_response(['ok' => true]);
             break;
@@ -489,6 +506,7 @@ function handle_create_practice(): void {
         // Démarrage immédiat
         $allIds = array_merge([(int)$me['id']], $botIds);
         assign_roles($sid, $allIds);
+        assign_captain($sid);
         snapshot_elos($sid);
 
         db()->prepare("UPDATE game_sessions
@@ -522,11 +540,12 @@ function phase_snapshot(int $sid): string {
 
 function role_fr(?string $r): string {
     switch ($r) {
-        case 'VILLAGER': return 'un simple Villageois';
-        case 'WEREWOLF': return 'un LOUP-GAROU';
-        case 'SEER':     return 'la Voyante';
-        case 'WITCH':    return 'la Sorcière';
-        case 'HUNTER':   return 'le Chasseur';
-        default:         return 'inconnu';
+        case 'VILLAGER':    return 'un simple Villageois';
+        case 'WEREWOLF':    return 'un LOUP-GAROU';
+        case 'SEER':        return 'la Voyante';
+        case 'WITCH':       return 'la Sorcière';
+        case 'HUNTER':      return 'le Chasseur';
+        case 'LITTLE_GIRL': return 'la Petite Fille';
+        default:            return 'inconnu';
     }
 }

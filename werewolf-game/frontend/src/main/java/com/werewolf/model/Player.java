@@ -15,14 +15,17 @@ public class Player {
     public int isAlive;
     @JsonProperty("is_host")
     public int isHost;
+    @JsonProperty("is_captain")
+    public int isCaptain;
     public String role;
     @JsonProperty("elo_before")
     public Integer eloBefore;
     @JsonProperty("elo_after")
     public Integer eloAfter;
 
-    public boolean alive() { return isAlive == 1; }
-    public boolean host()  { return isHost  == 1; }
+    public boolean alive()   { return isAlive   == 1; }
+    public boolean host()    { return isHost    == 1; }
+    public boolean captain() { return isCaptain == 1; }
     public Role roleEnum() { return Role.parse(role); }
     public String avatar() { return avatarUrl == null || avatarUrl.isEmpty() ? "👤" : avatarUrl; }
 

@@ -5,7 +5,8 @@ public enum Role {
     WEREWOLF("Loup-Garou"),
     SEER("Voyante"),
     WITCH("Sorcière"),
-    HUNTER("Chasseur");
+    HUNTER("Chasseur"),
+    LITTLE_GIRL("Petite Fille");
 
     private final String label;
     Role(String l) { this.label = l; }

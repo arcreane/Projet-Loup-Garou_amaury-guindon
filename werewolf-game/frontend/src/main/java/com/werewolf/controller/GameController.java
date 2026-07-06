@@ -54,6 +54,7 @@ public class GameController {
     @FXML private Button             secondaryActionBtn;
     @FXML private Button             passBtn;
     @FXML private Label              actionHint;
+    @FXML private Label              votesLabel;
 
     // Chat
     @FXML private ListView<String>   chatView;
@@ -176,7 +177,8 @@ public class GameController {
             String roleSuffix = (p.role != null) ? " — " + Role.parse(p.role).label() : "";
             String meTag = (p.id == Session.playerId) ? " (vous)" : "";
             String hostTag = p.host() ? " 👑" : "";
-            String label = p.avatar() + " " + p.pseudo + hostTag + meTag + roleSuffix;
+            String capTag  = p.captain() ? " 🎖" : "";
+            String label = p.avatar() + " " + p.pseudo + hostTag + capTag + meTag + roleSuffix;
             (p.alive() ? alive : dead).getChildren().add(new TreeItem<>(label));
         }
         alive.setExpanded(true);
@@ -187,6 +189,7 @@ public class GameController {
         playersTree.setShowRoot(false);
 
         buildActionPanel(s);
+        refreshVotes(s);
 
         // Sons + transitions visuelles
         if (!Objects.equals(lastStatus, s.session.status)) {
@@ -236,7 +239,65 @@ public class GameController {
         double pct = Math.max(0, Math.min(1.0, (double) localTimer / dur));
         phaseTimer.setProgress(pct);
         timerLabel.setText(localTimer + " s");
+
+        // Dernières secondes : barre rouge + pulsation du compteur
+        boolean danger = localTimer <= 10 && localTimer > 0
+                && !"ENDED".equals(currentState.session.status)
+                && !"WAITING".equals(currentState.session.status);
+        if (danger) {
+            if (!phaseTimer.getStyleClass().contains("timer-danger")) phaseTimer.getStyleClass().add("timer-danger");
+            if (!timerLabel.getStyleClass().contains("timer-danger-label")) timerLabel.getStyleClass().add("timer-danger-label");
+            ScaleTransition pulse = new ScaleTransition(Duration.millis(160), timerLabel);
+            pulse.setFromX(1.35); pulse.setFromY(1.35);
+            pulse.setToX(1.0);    pulse.setToY(1.0);
+            pulse.play();
+        } else {
+            phaseTimer.getStyleClass().remove("timer-danger");
+            timerLabel.getStyleClass().remove("timer-danger-label");
+        }
+
         if (localTimer > 0) localTimer--;
+    }
+
+    /**
+     * Décompte des votes en direct : visible pendant le vote du village
+     * (tout le monde) et pendant la nuit des loups (loups uniquement).
+     */
+    private void refreshVotes(StateResponse s) {
+        String phase = s.session.phase;
+        boolean show = Phase.DAY_VOTE.equals(phase)
+                || (Phase.NIGHT_WEREWOLF.equals(phase) && s.myRoleEnum() == Role.WEREWOLF);
+        if (!show) {
+            votesLabel.setVisible(false);
+            votesLabel.setManaged(false);
+            return;
+        }
+        Task<com.fasterxml.jackson.databind.JsonNode> t = new Task<>() {
+            @Override protected com.fasterxml.jackson.databind.JsonNode call() throws Exception {
+                return svc.votes(Session.currentGameId);
+            }
+        };
+        t.setOnSucceeded(e -> {
+            // La phase a pu changer entre-temps : on n'affiche pas un décompte périmé
+            if (currentState == null || !phase.equals(currentState.session.phase)) return;
+            var tally = t.getValue().path("tally");
+            StringBuilder sb = new StringBuilder("🗳 ");
+            if (!tally.isArray() || tally.isEmpty()) {
+                sb.append("Aucun vote pour l'instant");
+            } else {
+                boolean first = true;
+                for (var entry : tally) {
+                    if (!first) sb.append("  ·  ");
+                    sb.append(entry.path("target_pseudo").asText())
+                      .append(" : ").append(entry.path("nb").asInt()).append(" voix");
+                    first = false;
+                }
+            }
+            votesLabel.setText(sb.toString());
+            votesLabel.setVisible(true);
+            votesLabel.setManaged(true);
+        });
+        new Thread(t).start();
     }
 
     // =====================================================
@@ -306,6 +367,12 @@ public class GameController {
             showTargetList(others);
             primaryActionBtn.setText("Voter");
             primaryActionBtn.setOnAction(e -> doVote());
+        }
+        else if ("NIGHT".equals(s.session.status) && myRole == Role.LITTLE_GIRL) {
+            actionTitle.setText("👧 Vous espionnez...");
+            actionHint.setText("Cette nuit, le chat des loups vous est visible (🐺 dans le chat). "
+                    + "Utilisez ce que vous entendez au vote du jour — sans jamais révéler comment vous le savez.");
+            primaryActionBtn.setVisible(false); primaryActionBtn.setManaged(false);
         }
         else {
             actionTitle.setText("En attente");

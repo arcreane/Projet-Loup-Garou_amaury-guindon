@@ -9,6 +9,7 @@
 target/
 build/
 out/
+dependency-reduced-pom.xml
 *.class
 *.log
 hs_err_pid*
@@ -20,10 +21,10 @@ desktop.ini
 
 # ===== Logs PHP / serveur =====
 *.log
-backend/logs/
+**/backend/logs/
 
 # ===== Données sensibles =====
-backend/api/config.local.php
+**/config.local.php
 .env
 .env.local
 

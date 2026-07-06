@@ -408,6 +408,25 @@
 }
 .phase-timer { -fx-pref-height: 6; }
 
+/* Dernières secondes : la barre vire au rouge et pulse (voir GameController.tickTimer) */
+.phase-timer.timer-danger .bar {
+    -fx-background-color: linear-gradient(to right, #d92b2b, #ff5c33);
+    -fx-effect: dropshadow(gaussian, rgba(255,60,40,0.85), 14, 0.6, 0, 0);
+}
+.timer-danger-label {
+    -fx-text-fill: #ff5c4d;
+    -fx-font-weight: bold;
+}
+
+/* ---------- Décompte des votes en direct ---------- */
+.votes-tally {
+    -fx-text-fill: -text-muted;
+    -fx-font-size: 13px;
+    -fx-padding: 6 10 6 10;
+    -fx-background-color: -surface-3;
+    -fx-background-radius: 10;
+}
+
 /* ---------- ScrollBar ---------- */
 .scroll-bar:vertical, .scroll-bar:horizontal {
     -fx-background-color: transparent;
