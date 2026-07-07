@@ -397,14 +397,19 @@
 }
 
 /* ---------- ProgressBar (timer) ---------- */
+/* insets/padding à 0 : les marges par défaut de modena (~3-4px) rendaient
+   le remplissage invisible sur une barre de 6px de haut */
 .phase-timer .bar {
     -fx-background-color: linear-gradient(to right, -accent, #ff8a5b);
     -fx-background-radius: 999;
+    -fx-background-insets: 0;
+    -fx-padding: 3;
     -fx-effect: dropshadow(gaussian, -accent-glow, 8, 0.5, 0, 0);
 }
 .phase-timer .track {
     -fx-background-color: -surface-3;
     -fx-background-radius: 999;
+    -fx-background-insets: 0;
 }
 .phase-timer { -fx-pref-height: 6; }
 
